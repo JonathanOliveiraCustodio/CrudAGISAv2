@@ -9,12 +9,20 @@
 <title>Professor</title>
 <script>
 	function validarBusca() {
-		var cpf = document.getElementById("codigo").value;
-		if (cpf.trim() === "") {
+		var codigo = document.getElementById("codigo").value;
+		if (codigo.trim() === "") {
 			alert("Por favor, insira um Código.");
 			return false;
 		}
 		return true;
+	}
+	function editarProfessor(codigo) {
+		window.location.href = 'professor?cmd=alterar&codigo=' + codigo;
+	}
+	function excluirProfessor(codigo) {
+		if (confirm("Tem certeza que deseja excluir esse Professor?")) {
+			window.location.href = 'professor?cmd=excluir&codigo=' + codigo;
+		}
 	}
 </script>
 </head>
@@ -104,17 +112,27 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
+						<th class="titulo-tabela" colspan="5"
+							style="text-align: center; font-size: 23px;">Lista de Professores</th>
+					</tr>
+					<tr>
+					    <th>Selecionar</th>
 						<th>Codigo</th>
 						<th>Nome</th>
 						<th>Titulação</th>
+						<th>Excluir</th>
 					</tr>
 				</thead>
 				<tbody class="table-group-divider">
 					<c:forEach var="p" items="${professores }">
 						<tr>
+						<td><input type="radio" name="opcao" value="${p.codigo}"
+								onclick="editarProfessor(this.value)"
+								${p.codigo eq codigoEdicao ? 'checked' : ''} /></td>
 							<td><c:out value="${p.codigo }" /></td>
 							<td><c:out value="${p.nome }" /></td>
 							<td><c:out value="${p.titulacao }" /></td>
+							<td><button class="btn btn-danger" onclick="excluirProfessor('${p.codigo}')">EXCLUIR</button></td>
 						</tr>
 					</c:forEach>
 				</tbody>

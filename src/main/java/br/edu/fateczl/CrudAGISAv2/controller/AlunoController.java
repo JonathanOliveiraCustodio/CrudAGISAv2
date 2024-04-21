@@ -23,35 +23,46 @@ public class AlunoController {
 
 	@RequestMapping(name = "aluno", value = "/aluno", method = RequestMethod.GET)
 	public ModelAndView alunoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
-		
+
+		String cmd = allRequestParam.get("cmd");
+		String CPF = allRequestParam.get("CPF");
+
+		Aluno a = new Aluno();
+		a.setCPF(CPF);
+
+		String saida = "";
 		String erro = "";
-
 		List<Aluno> alunos = new ArrayList<>();
-		GenericDao gDao = new GenericDao();
-
 		List<Curso> cursos = new ArrayList<>();
-		CursoDao cDao = new CursoDao(gDao);
 
 		try {
-					cursos = cDao.listar();
-
-		} catch (ClassNotFoundException | SQLException e) {
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
+					a = buscarAluno(a);
+				} else 
+					if (cmd.contains("excluir")) {
+					a = buscarAluno(a);
+					saida = excluirAluno(a);
+				}
+				alunos = listarAlunos();
+			}
+			cursos = listarCursos();
+		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
-
 		} finally {
+			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
+			model.addAttribute("aluno", a);
 			model.addAttribute("alunos", alunos);
 			model.addAttribute("cursos", cursos);
-
 		}
-		
+
 		return new ModelAndView("aluno");
 	}
 
 	@RequestMapping(name = "aluno", value = "/aluno", method = RequestMethod.POST)
 	public ModelAndView alunoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
-		
-		
+
 		String cmd = allRequestParam.get("botao");
 		String CPF = allRequestParam.get("CPF");
 		String nome = allRequestParam.get("nome");
@@ -133,16 +144,16 @@ public class AlunoController {
 			if (cmd.contains("Listar")) {
 				alunos = listarAlunos();
 			}
-			
-			if (cmd.contains("Telefone")) {                    
-			    a = buscarAluno(a);
-			    if (a == null) {
-			        saida = "Nenhum aluno encontrado com o CPF especificado.";
-			        a = null;
-			    } else {
-			        model.addAttribute("aluno", a); 
-			        return new ModelAndView("forward:/telefone", model); 
-			    }
+
+			if (cmd.contains("Telefone")) {
+				a = buscarAluno(a);
+				if (a == null) {
+					saida = "Nenhum aluno encontrado com o CPF especificado.";
+					a = null;
+				} else {
+					model.addAttribute("aluno", a);
+					return new ModelAndView("forward:/telefone", model);
+				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
@@ -153,9 +164,10 @@ public class AlunoController {
 			model.addAttribute("alunos", alunos);
 			model.addAttribute("cursos", cursos);
 		}
-		
+
 		return new ModelAndView("aluno");
 	}
+
 	private String cadastrarAluno(Aluno a) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		AlunoDao pDao = new AlunoDao(gDao);

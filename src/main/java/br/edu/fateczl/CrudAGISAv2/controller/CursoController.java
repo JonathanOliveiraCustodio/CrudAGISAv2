@@ -14,12 +14,46 @@ import br.edu.fateczl.CrudAGISAv2.model.Curso;
 import br.edu.fateczl.CrudAGISAv2.persistence.CursoDao;
 import br.edu.fateczl.CrudAGISAv2.persistence.GenericDao;
 
+
 @Controller
 public class CursoController {
 
 	@RequestMapping(name = "curso", value = "/curso", method = RequestMethod.GET)
 	public ModelAndView cursoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
+		
+		String erro = "";
+		String saida = "";
+		
+		List<Curso> cursos = new ArrayList<>();
+		Curso c = new Curso();
 
+		try {
+			String cmd = allRequestParam.get("cmd");
+			String codigo = allRequestParam.get("codigo");
+
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
+
+					c.setCodigo(Integer.parseInt(codigo));
+					c = buscarCurso(c);
+
+				} else if (cmd.contains("excluir")) {
+					c.setCodigo(Integer.parseInt(codigo));
+					saida = excluirCurso(c);
+
+				}
+				cursos = listarCurso();
+			}
+
+		} catch (ClassNotFoundException | SQLException e) {
+			erro = e.getMessage();
+		} finally {
+			model.addAttribute("erro", erro);
+			model.addAttribute("saida", saida);
+			model.addAttribute("curso", c);
+			model.addAttribute("cursos", cursos);
+
+		}
 		return new ModelAndView("curso");
 	}
 

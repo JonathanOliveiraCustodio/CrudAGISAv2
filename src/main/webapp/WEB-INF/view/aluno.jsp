@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +20,16 @@
 			return false;
 		}
 		return true;
+	}
+</script>
+<script>
+	function editarAluno(CPF) {
+		window.location.href = 'aluno?cmd=alterar&CPF=' + CPF;
+	}
+	function excluirAluno(CPF) {
+		if (confirm("Tem certeza que deseja excluir este Aluno?")) {
+			window.location.href = 'dependente?cmd=excluir&codigo=' + CPF;
+		}
 	}
 </script>
 
@@ -222,12 +232,13 @@
 							style="text-align: center; font-size: 23px;">Lista de Alunos</th>
 					</tr>
 					<tr>
+				    	<th>Selecionar</th>
 						<th>CPF</th>
 						<th>Nome</th>
 						<th>Nome Social</th>
 						<th>Dt Nascimento</th>
 						<th>Tel Contato</th>
-						
+
 						<!-- 
 						<th>E-mail Pessoal</th>
 						<th>E-mail Corporativo</th>
@@ -246,25 +257,31 @@
 				<tbody class="table-group-divider">
 					<c:forEach var="a" items="${alunos }">
 						<tr>
+						<td><input type="radio" name="opcao" value="${a.CPF}"
+							onclick="editarAluno(this.value)"
+							${a.CPF eq codigoEdicao ? 'checked' : ''} /></td>
 							<td><c:out value="${a.CPF }" /></td>
 							<td><c:out value="${a.nome }" /></td>
 							<td><c:out value="${a.nomeSocial }" /></td>
-							<td><fmt:formatDate value="${a.dataNascimento}" pattern="dd/MM/yyyy" /></td>
+							<td><fmt:formatDate value="${a.dataNascimento}"
+									pattern="dd/MM/yyyy" /></td>
 							<td>
 								<button onclick="window.location.href='telefone?aluno=${a.CPF}'"
 									class="btn btn-primary">Telefones</button>
 							</td>
-							 <!--
+							<!--
 							<td><c:out value="${a.emailPessoal }" /></td>
 							<td><c:out value="${a.emailCorporativo }" /></td>
 							-->
-							<td><fmt:formatDate value="${a.dataConclusao2Grau}" pattern="dd/MM/yyyy" /></td>
+							<td><fmt:formatDate value="${a.dataConclusao2Grau}"
+									pattern="dd/MM/yyyy" /></td>
 							<td><c:out value="${a.instituicaoConclusao2Grau }" /></td>
 							<td><c:out value="${a.pontuacaoVestibular }" /></td>
 							<td><c:out value="${a.posicaoVestibular }" /></td>
 							<td><c:out value="${a.anoIngresso }" /></td>
 							<td><c:out value="${a.semestreIngresso }" /></td>
-							<td><c:out value="${a.semestreAnoLimiteGraduacao }" /></td>
+							<td><fmt:formatDate value="${a.semestreAnoLimiteGraduacao}"
+									pattern="dd/MM/yyyy" /></td>
 							<td><c:out value="${a.RA }" /></td>
 							<td><c:out value="${a.curso.nome }" /></td>
 						</tr>

@@ -20,6 +20,39 @@ public class ProfessorController {
 	@RequestMapping(name = "professor", value = "/professor", method = RequestMethod.GET)
 	public ModelAndView professorGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 
+		String erro = "";
+		String saida = "";
+		
+		List<Professor> professores = new ArrayList<>();
+		Professor p = new Professor();
+
+		try {
+			String cmd = allRequestParam.get("cmd");
+			String codigo = allRequestParam.get("codigo");
+
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
+
+					p.setCodigo(Integer.parseInt(codigo));
+					p = buscarProfessor(p);
+
+				} else if (cmd.contains("excluir")) {
+					p.setCodigo(Integer.parseInt(codigo));
+					saida = excluirProfessor(p);
+
+				}
+				professores = listarProfessores();
+			}
+
+		} catch (ClassNotFoundException | SQLException e) {
+			erro = e.getMessage();
+		} finally {
+			model.addAttribute("erro", erro);
+			model.addAttribute("saida", saida);
+			model.addAttribute("professor", p);
+			model.addAttribute("professores", professores);
+
+		}
 		return new ModelAndView("professor");
 	}
 

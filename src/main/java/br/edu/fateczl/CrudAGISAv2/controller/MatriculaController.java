@@ -3,6 +3,7 @@ package br.edu.fateczl.CrudAGISAv2.controller;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,17 +133,20 @@ public class MatriculaController {
 	}
 
 	private boolean estaNoPeriodoDeMatricula() throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		CursoDao cDao = new CursoDao(gDao);
-		Curso c = new Curso();
+	    GenericDao gDao = new GenericDao();
+	    CursoDao cDao = new CursoDao(gDao);
+	    Curso c = new Curso();
 
-		long millisAtual = System.currentTimeMillis();
-		Date dataAtual = new Date(millisAtual);
-		boolean periodoValido = false;
-
-		c = cDao.consultarPeriodoMatricula();
-		periodoValido = (!c.getPeriodoMatriculaInicio().after(dataAtual) && !c.getPeriodoMatriculaFim().before(dataAtual));
-		return periodoValido;
+	    long millisAtual = System.currentTimeMillis();
+	    Date dataAtual = new Date(millisAtual);
+	    boolean periodoValido = false;
+	    c = cDao.consultarPeriodoMatricula();
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(c.getPeriodoMatriculaFim());
+	    calendar.add(Calendar.DAY_OF_MONTH, 1);
+	    Date periodoMatriculaFimPlusOne = new Date(calendar.getTimeInMillis());
+	    periodoValido = (!c.getPeriodoMatriculaInicio().after(dataAtual) && !periodoMatriculaFimPlusOne.before(dataAtual));
+	    return periodoValido;
 	}
 
 	private Matricula buscarMatriculaAtual(Aluno a) throws ClassNotFoundException, SQLException {

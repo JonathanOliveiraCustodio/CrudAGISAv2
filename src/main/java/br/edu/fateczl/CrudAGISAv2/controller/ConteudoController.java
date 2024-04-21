@@ -4,14 +4,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import br.edu.fateczl.CrudAGISAv2.model.Conteudo;
 import br.edu.fateczl.CrudAGISAv2.model.Disciplina;
 import br.edu.fateczl.CrudAGISAv2.persistence.ConteudoDao;
@@ -24,30 +22,49 @@ public class ConteudoController {
 
 	@RequestMapping(name = "conteudo", value = "/conteudo", method = RequestMethod.GET)
 	public ModelAndView conteudoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
+		
 		String erro = "";
+		String saida = "";
+		
 		List<Disciplina> disciplinas = new ArrayList<>();
-		GenericDao gDao = new GenericDao();
-		DisciplinaDao dDao = new DisciplinaDao(gDao);
-		
-		
 	    List<Conteudo> conteudos = new ArrayList<>();
-		ConteudoDao cDao = new ConteudoDao(gDao);
-		
+
+		Conteudo c = new Conteudo();
+
 		try {
-			disciplinas = dDao.listar();
-			conteudos = cDao.listar();
+			String cmd = allRequestParam.get("cmd");
+			String codigo = allRequestParam.get("codigo");
+
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
+
+					c.setCodigo(Integer.parseInt(codigo));
+					c = buscarConteudo(c);
+
+				} else if (cmd.contains("excluir")) {
 					
+					c.setCodigo(Integer.parseInt(codigo));
+					c = buscarConteudo(c);
+					saida = excluirConteudo(c);
+					c = null;
+
+				}
+				conteudos = listarConteudos();
+			}
+			disciplinas = listarDisciplinas();
+
 		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
-
 		} finally {
 			model.addAttribute("erro", erro);
-			model.addAttribute("disciplinas", disciplinas);
+			model.addAttribute("saida", saida);
+			model.addAttribute("conteudo", c);
 			model.addAttribute("conteudos", conteudos);
+			model.addAttribute("disciplinas", disciplinas);
+
 		}
 		return new ModelAndView("conteudo");
 	}
-
 	@RequestMapping(name = "conteudo", value = "/conteudo", method = RequestMethod.POST)
 	public ModelAndView conteudoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 

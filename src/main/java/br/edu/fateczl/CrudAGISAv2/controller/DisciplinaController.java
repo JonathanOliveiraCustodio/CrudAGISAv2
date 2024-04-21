@@ -18,106 +18,122 @@ import br.edu.fateczl.CrudAGISAv2.persistence.DisciplinaDao;
 import br.edu.fateczl.CrudAGISAv2.persistence.GenericDao;
 import br.edu.fateczl.CrudAGISAv2.persistence.ProfessorDao;
 
-
 @Controller
 public class DisciplinaController {
 
 	@RequestMapping(name = "disciplina", value = "/disciplina", method = RequestMethod.GET)
 	public ModelAndView disciplinaGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
-String erro = "";
-		
+
+		String erro = "";
+		String saida = "";
+
 		List<Professor> professores = new ArrayList<>();
 		GenericDao gDao = new GenericDao();
 		ProfessorDao pDao = new ProfessorDao(gDao);
-		
+
 		List<Curso> cursos = new ArrayList<>();
 		CursoDao cDao = new CursoDao(gDao);
-			
+
 		List<Disciplina> disciplinas = new ArrayList<>();
-	//	DisciplinaDao dDao = new DisciplinaDao(gDao);
-		
+
+		Disciplina d = new Disciplina();
+
 		try {
 			professores = pDao.listar();
 			cursos = cDao.listar();
-		//	disciplinas = dDao.listar();
-					
+
+			String cmd = allRequestParam.get("cmd");
+			String codigo = allRequestParam.get("codigo");
+
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
+
+					d.setCodigo(Integer.parseInt(codigo));
+					d = buscarDisciplina(d);
+
+				} else if (cmd.contains("excluir")) {
+					d.setCodigo(Integer.parseInt(codigo));
+					saida = excluirDisciplina(d);
+
+				}
+				disciplinas = listarDisciplinas();
+			}
+
 		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
-
 		} finally {
 			model.addAttribute("erro", erro);
-			model.addAttribute("professores", professores);	
+			model.addAttribute("saida", saida);
+			model.addAttribute("disciplina", d);
+			model.addAttribute("professores", professores);
 			model.addAttribute("cursos", cursos);
-			model.addAttribute("disciplinas", disciplinas);			
+			model.addAttribute("disciplinas", disciplinas);
 		}
-	
+
 		return new ModelAndView("disciplina");
 	}
 
 	@RequestMapping(name = "disciplina", value = "/disciplina", method = RequestMethod.POST)
 	public ModelAndView disciplinaPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
-		
+
 		String cmd = allRequestParam.get("botao");
 		String codigo = allRequestParam.get("codigo");
 		String nome = allRequestParam.get("nome");
-		String horasSemanais = allRequestParam.get("horasSemanais");		
+		String horasSemanais = allRequestParam.get("horasSemanais");
 		String horaInicio = allRequestParam.get("horaInicio");
 		String semestre = allRequestParam.get("semestre");
 		String diaSemana = allRequestParam.get("diaSemana");
 		String professor = allRequestParam.get("professor");
 		String curso = allRequestParam.get("curso");
-		
+
 		// saida
 		String saida = "";
-		String erro = "";	
-		
-		
+		String erro = "";
+
 		Disciplina d = new Disciplina();
 		Professor p = new Professor();
-        Curso c = new Curso();
-		
-		
+		Curso c = new Curso();
+
 		List<Professor> professores = new ArrayList<>();
 		List<Curso> cursos = new ArrayList<>();
 		List<Disciplina> disciplinas = new ArrayList<>();
-	    
 
 		try {
-			
-		if (!cmd.contains("Listar")) {
-			p.setCodigo(Integer.parseInt(professor));
-			p = buscarProfessor(p);
-			d.setProfessor(p);			
-			c.setCodigo(Integer.parseInt(curso));
-			c = buscarCurso(c);
-			d.setCurso(c);			
-			d.setCodigo(Integer.parseInt(codigo));
-		}			
+
+			if (!cmd.contains("Listar")) {
+				p.setCodigo(Integer.parseInt(professor));
+				p = buscarProfessor(p);
+				d.setProfessor(p);
+				c.setCodigo(Integer.parseInt(curso));
+				c = buscarCurso(c);
+				d.setCurso(c);
+				d.setCodigo(Integer.parseInt(codigo));
+			}
 			professores = listarProfessores();
 			cursos = listarCursos();
-				
-		    if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {	  			
-		    	d.setNome(nome);
-		    	d.setHorasSemanais(Integer.parseInt(horasSemanais));
-		    	d.setHoraInicio(horaInicio);
-		    	d.setSemestre(Integer.parseInt(semestre));
-		    	d.setDiaSemana(diaSemana);			
-		    }
 
-		    if (cmd.contains("Cadastrar")) {
-		    	saida = cadastrarDisciplina(d);
+			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+				d.setNome(nome);
+				d.setHorasSemanais(Integer.parseInt(horasSemanais));
+				d.setHoraInicio(horaInicio);
+				d.setSemestre(Integer.parseInt(semestre));
+				d.setDiaSemana(diaSemana);
+			}
+
+			if (cmd.contains("Cadastrar")) {
+				saida = cadastrarDisciplina(d);
 				d = null;
-		    }
-		    if (cmd.contains("Alterar")) {
-		    	saida = alterarDisciplina(d);
+			}
+			if (cmd.contains("Alterar")) {
+				saida = alterarDisciplina(d);
 				d = null;
-		    }
-		    if (cmd.contains("Excluir")) {    	
-		   
-		    	saida = excluirDisciplina(d);
+			}
+			if (cmd.contains("Excluir")) {
+
+				saida = excluirDisciplina(d);
 				d = null;
-		    }
-		    if (cmd.contains("Buscar")) {
+			}
+			if (cmd.contains("Buscar")) {
 				d = buscarDisciplina(d);
 				if (d == null) {
 					saida = "Nenhuma disciplina encontrado com o código especificado.";
@@ -131,22 +147,22 @@ String erro = "";
 			if (cmd.contains("Listar")) {
 				disciplinas = listarDisciplinas();
 			}
-		    			    
+
 		} catch (SQLException | ClassNotFoundException e) {
-		    erro = e.getMessage();
+			erro = e.getMessage();
 		} finally {
 			model.addAttribute("saida", saida);
-		    model.addAttribute("erro", erro);
-		    model.addAttribute("disciplina", d);
-		    model.addAttribute("professores", professores);
-		    model.addAttribute("cursos", cursos);
-		    model.addAttribute("disciplinas", disciplinas);		   
-	
+			model.addAttribute("erro", erro);
+			model.addAttribute("disciplina", d);
+			model.addAttribute("professores", professores);
+			model.addAttribute("cursos", cursos);
+			model.addAttribute("disciplinas", disciplinas);
+
 		}
-		
+
 		return new ModelAndView("disciplina");
 	}
-	
+
 	private String cadastrarDisciplina(Disciplina d) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		DisciplinaDao pDao = new DisciplinaDao(gDao);
@@ -170,6 +186,7 @@ String erro = "";
 		return saida;
 
 	}
+
 	private Disciplina buscarDisciplina(Disciplina d) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		DisciplinaDao dDao = new DisciplinaDao(gDao);
@@ -183,7 +200,6 @@ String erro = "";
 		List<Disciplina> disciplinas = dDao.listar();
 		return disciplinas;
 	}
-	
 
 	private Professor buscarProfessor(Professor p) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
@@ -200,7 +216,7 @@ String erro = "";
 
 		return professores;
 	}
-	
+
 	private Curso buscarCurso(Curso c) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		CursoDao cDao = new CursoDao(gDao);
@@ -218,5 +234,3 @@ String erro = "";
 	}
 
 }
-
-

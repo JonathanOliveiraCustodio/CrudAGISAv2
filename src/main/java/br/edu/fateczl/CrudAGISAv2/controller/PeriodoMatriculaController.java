@@ -31,7 +31,6 @@ public class PeriodoMatriculaController {
 			erro = e.getMessage();
 		}
 
-		// RequestDispatcher rd = request.getRequestDispatcher("periodoMatricula.jsp");
 		model.addAttribute("erro", erro);
 		model.addAttribute("curso", c);
 
