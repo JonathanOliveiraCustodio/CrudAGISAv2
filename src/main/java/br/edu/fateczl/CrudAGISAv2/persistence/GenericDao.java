@@ -13,7 +13,7 @@ public class GenericDao {
 	
 	public Connection getConnection() throws ClassNotFoundException, SQLException {	
 		String hostName= "localhost";
-		String dbName = "SistemaAGIS";
+		String dbName = "SistemaAGISAV2";
 		String user = "jonathan";
 		String senha = "12345678";
 		Class.forName("net.sourceforge.jtds.jdbc.Driver");//
