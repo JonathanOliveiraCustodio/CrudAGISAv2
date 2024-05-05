@@ -28,7 +28,7 @@
 	}
 	function excluirAluno(CPF) {
 		if (confirm("Tem certeza que deseja excluir este Aluno?")) {
-			window.location.href = 'dependente?cmd=excluir&codigo=' + CPF;
+			window.location.href = 'aluno?cmd=excluir&codigo=' + CPF;
 		}
 	}
 </script>

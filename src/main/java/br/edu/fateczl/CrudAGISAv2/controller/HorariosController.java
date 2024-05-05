@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,18 @@ import br.edu.fateczl.CrudAGISAv2.persistence.MatriculaDao;
 
 @Controller
 public class HorariosController {
+	
+	@Autowired
+	GenericDao gDao;
+	
+	@Autowired
+	MatriculaDao mDao;
+	
+	@Autowired
+	AlunoDao aDao;
+	
+	@Autowired
+	DisciplinaDao dDao;
 
 	@RequestMapping(name = "horarios", value = "/horarios", method = RequestMethod.GET)
 	public ModelAndView horariosGet(ModelMap model) {
@@ -64,8 +78,7 @@ public class HorariosController {
 	private Map<String, List<Disciplina>> buscarDisciplinasAluno(Matricula m) throws ClassNotFoundException, SQLException {
 		List<Disciplina> disciplinas = new ArrayList<>();
 		Map<String, List<Disciplina>> disciplinasPorSemana = new HashMap<String, List<Disciplina>>();
-		GenericDao gDao2 = new GenericDao();
-	 	DisciplinaDao dDao = new DisciplinaDao(gDao2);
+		
 	 	
 		disciplinas = dDao.listarDisciplinasCursadas(m);
 		for(Disciplina d : disciplinas){
@@ -82,8 +95,6 @@ public class HorariosController {
 
 
 	private Matricula buscarMatriculaAtual(Aluno a) throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		MatriculaDao mDao = new MatriculaDao(gDao);
 		Matricula m = new Matricula();
 		m = mDao.buscarMatriculaAtualAluno(a);
 		return m;
@@ -91,9 +102,7 @@ public class HorariosController {
 
 
 	private Aluno buscarAluno(Aluno a) throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		AlunoDao pDao = new AlunoDao(gDao);
-		a = pDao.consultarPorRA(a);
+		a = aDao.consultarPorRA(a);
 		return a;
 	}
 

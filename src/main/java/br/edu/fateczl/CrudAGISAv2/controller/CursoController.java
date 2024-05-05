@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,12 @@ import br.edu.fateczl.CrudAGISAv2.persistence.GenericDao;
 
 @Controller
 public class CursoController {
+	
+	@Autowired
+	GenericDao gDao;
+	
+	@Autowired
+	CursoDao cDao;
 
 	@RequestMapping(name = "curso", value = "/curso", method = RequestMethod.GET)
 	public ModelAndView cursoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
@@ -128,42 +136,31 @@ public class CursoController {
 	}
 
 	private String cadastrarCurso(Curso c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		CursoDao pDao = new CursoDao(gDao);
-		String saida = pDao.iudCurso("I", c);
+		String saida = cDao.iudCurso("I", c);
 		return saida;
 
 	}
 
 	private String alterarCurso(Curso c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		CursoDao pDao = new CursoDao(gDao);
-		String saida = pDao.iudCurso("U", c);
+		String saida = cDao.iudCurso("U", c);
 		return saida;
 
 	}
 
 	private String excluirCurso(Curso c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		CursoDao pDao = new CursoDao(gDao);
-		String saida = pDao.iudCurso("D", c);
+		String saida = cDao.iudCurso("D", c);
 		return saida;
 
 	}
 
 	private Curso buscarCurso(Curso c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		CursoDao pDao = new CursoDao(gDao);
-		c = pDao.consultar(c);
+		c = cDao.consultar(c);
 		return c;
 
 	}
 
 	private List<Curso> listarCurso() throws SQLException, ClassNotFoundException {
-
-		GenericDao gDao = new GenericDao();
-		CursoDao pDao = new CursoDao(gDao);
-		List<Curso> cursos = pDao.listar();
+		List<Curso> cursos = cDao.listar();
 
 		return cursos;
 	}

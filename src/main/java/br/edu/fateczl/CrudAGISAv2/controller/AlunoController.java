@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,15 @@ import br.edu.fateczl.CrudAGISAv2.persistence.GenericDao;
 
 @Controller
 public class AlunoController {
+	
+	@Autowired
+	GenericDao gDao;
+	
+	@Autowired
+	AlunoDao aDao;
+	
+	@Autowired
+	CursoDao cDao;
 
 	@RequestMapping(name = "aluno", value = "/aluno", method = RequestMethod.GET)
 	public ModelAndView alunoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
@@ -169,54 +180,40 @@ public class AlunoController {
 	}
 
 	private String cadastrarAluno(Aluno a) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		AlunoDao pDao = new AlunoDao(gDao);
-		String saida = pDao.iudAluno("I", a);
+		String saida = aDao.iudAluno("I", a);
 		return saida;
 
 	}
 
 	private String alterarAluno(Aluno a) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		AlunoDao pDao = new AlunoDao(gDao);
-		String saida = pDao.iudAluno("U", a);
+		String saida = aDao.iudAluno("U", a);
 		return saida;
 
 	}
 
 	private String excluirAluno(Aluno a) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		AlunoDao pDao = new AlunoDao(gDao);
-		String saida = pDao.iudAluno("D", a);
+		String saida = aDao.iudAluno("D", a);
 		return saida;
 
 	}
 
 	private Aluno buscarAluno(Aluno a) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		AlunoDao pDao = new AlunoDao(gDao);
-		a = pDao.consultar(a);
+		a = aDao.consultar(a);
 		return a;
 	}
 
 	private List<Aluno> listarAlunos() throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		AlunoDao pDao = new AlunoDao(gDao);
-		List<Aluno> alunos = pDao.listar();
+		List<Aluno> alunos = aDao.listar();
 		return alunos;
 	}
 
 	private Curso buscarCurso(Curso c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		CursoDao cDao = new CursoDao(gDao);
 		c = cDao.consultar(c);
 		return c;
 
 	}
 
 	private List<Curso> listarCursos() throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		CursoDao cDao = new CursoDao(gDao);
 		List<Curso> cursos = cDao.listar();
 
 		return cursos;

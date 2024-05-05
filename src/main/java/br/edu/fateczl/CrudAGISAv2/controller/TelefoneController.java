@@ -26,6 +26,7 @@ public class TelefoneController {
 
 		String erro = "";
 		String aluno = allRequestParam.get("aluno");
+		
 		List<Telefone> telefones = new ArrayList<>();
 		Aluno a = new Aluno();
 		a.setCPF(aluno);

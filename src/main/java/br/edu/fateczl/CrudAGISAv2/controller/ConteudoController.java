@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,15 @@ import br.edu.fateczl.CrudAGISAv2.persistence.GenericDao;
 @Controller
 public class ConteudoController {
 
+	@Autowired
+	GenericDao gDao;
+
+	@Autowired
+	ConteudoDao cDao;
+	
+	@Autowired
+	DisciplinaDao dDao;
+	
 	@RequestMapping(name = "conteudo", value = "/conteudo", method = RequestMethod.GET)
 	public ModelAndView conteudoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 		
@@ -144,56 +155,41 @@ public class ConteudoController {
 	}
 	
 	private String cadastrarConteudo(Conteudo c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ConteudoDao cDao = new ConteudoDao(gDao);
 		String saida = cDao.iudConteudo("I", c);
 		return saida;
 
 	}
 
 	private String alterarConteudo(Conteudo c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ConteudoDao cDao = new ConteudoDao(gDao);
 		String saida = cDao.iudConteudo("U", c);
 		return saida;
 
 	}
 
 	private String excluirConteudo(Conteudo c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ConteudoDao cDao = new ConteudoDao(gDao);
 		String saida = cDao.iudConteudo("D", c);
 		return saida;
 
 	}
 	private Conteudo buscarConteudo(Conteudo c) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ConteudoDao cDao = new ConteudoDao(gDao);
 		c = cDao.consultar(c);
 		return c;
 	}
 
 	private List<Conteudo> listarConteudos() throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ConteudoDao cDao = new ConteudoDao(gDao);
 		List<Conteudo> conteudos = cDao.listar();
 		return conteudos;
 	}
 	
 
 	private Disciplina buscarDisciplina(Disciplina d) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		DisciplinaDao pDao = new DisciplinaDao(gDao);
-		d = pDao.consultar(d);
+		d = dDao.consultar(d);
 		return d;
 
 	}
 
 	private List<Disciplina> listarDisciplinas() throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		DisciplinaDao dDao = new DisciplinaDao(gDao);
 		List<Disciplina> disciplinas = dDao.listar();
-
 		return disciplinas;
 	}
 

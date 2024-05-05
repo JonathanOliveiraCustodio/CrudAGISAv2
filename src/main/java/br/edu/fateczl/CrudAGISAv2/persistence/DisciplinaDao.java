@@ -79,8 +79,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 		List<Disciplina> disciplinas = new ArrayList<>();
 		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append(
-				"SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso ");
+		sql.append("SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso ");
 		sql.append("FROM disciplina d JOIN professor p ON d.codigoProfessor = p.codigo ");
 		sql.append("JOIN curso c ON d.codigoCurso = c.codigo ");
 

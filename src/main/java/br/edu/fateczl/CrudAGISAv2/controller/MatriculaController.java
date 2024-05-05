@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,26 @@ import br.edu.fateczl.CrudAGISAv2.persistence.MatriculaDao;
 
 @Controller
 public class MatriculaController {
+	
+	@Autowired
+	GenericDao gDao;
+	
+	@Autowired
+	DisciplinaDao dDao;
+	
+	@Autowired
+	MatriculaDao mDao;
+	
+	@Autowired
+	CursoDao cDao;
+	
+	@Autowired
+	AlunoDao aDao;
+		
+	@Autowired
+	DisciplinasMatriculadasDao dmDao;
+	
+	
 
 	@RequestMapping(name = "matricula", value = "/matricula", method = RequestMethod.GET)
 	public ModelAndView matriculaGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
@@ -112,31 +134,23 @@ public class MatriculaController {
 	}
 	
 	private Aluno buscarAluno(Aluno a) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		AlunoDao pDao = new AlunoDao(gDao);
-		a = pDao.consultarPorRA(a);
+		a = aDao.consultarPorRA(a);
 		return a;
 	}
 
 	private Disciplina buscarDisciplina(Disciplina d) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		DisciplinaDao dDao = new DisciplinaDao(gDao);
 		d = dDao.consultar(d);
 		return d;
 	}
 
 	private String realizarMatriculaDisciplina(Disciplina d, Matricula m) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		DisciplinasMatriculadasDao dmDao = new DisciplinasMatriculadasDao(gDao);
+
 		String saida = dmDao.matricularDisciplina(d, m);
 		return saida;
 	}
 
 	private boolean estaNoPeriodoDeMatricula() throws ClassNotFoundException, SQLException {
-	    GenericDao gDao = new GenericDao();
-	    CursoDao cDao = new CursoDao(gDao);
 	    Curso c = new Curso();
-
 	    long millisAtual = System.currentTimeMillis();
 	    Date dataAtual = new Date(millisAtual);
 	    boolean periodoValido = false;
@@ -150,9 +164,6 @@ public class MatriculaController {
 	}
 
 	private Matricula buscarMatriculaAtual(Aluno a) throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		CursoDao cDao = new CursoDao(gDao);
-		MatriculaDao mDao = new MatriculaDao(gDao);
 		Curso c = new Curso();
 		c = cDao.consultarPeriodoMatricula();
 
@@ -162,17 +173,11 @@ public class MatriculaController {
 	}
 
 	private List<Integer> buscarDisciplinasMatriculadasCodigos(Matricula m) throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		DisciplinasMatriculadasDao dmDao = new DisciplinasMatriculadasDao(gDao);
-
 		List<Integer> codigos = dmDao.buscarCodigoDisciplinasMatriculadas(m.getCodigo());
 		return codigos;
 	}
 
 	private Matricula novaMatricula(Aluno a) throws ClassNotFoundException, SQLException {
-		GenericDao gDao = new GenericDao();
-		MatriculaDao mDao = new MatriculaDao(gDao);
-
 		mDao.novaMatricula(a);
 		Matricula m = buscarMatriculaAtual(a);
 		return m;
@@ -181,9 +186,7 @@ public class MatriculaController {
 	private Map<String, List<Disciplina>> disciplinasDisponiveis(Aluno a) throws ClassNotFoundException, SQLException {
 		List<Disciplina> disciplinas = new ArrayList<>();
 		Map<String, List<Disciplina>> disciplinasPorSemana = new HashMap<String, List<Disciplina>>();
-		GenericDao gDao2 = new GenericDao();
-		DisciplinaDao dDao = new DisciplinaDao(gDao2);
-
+		
 		disciplinas = dDao.listarParaMatricula(a);
 		for (Disciplina d : disciplinas) {
 			List<Disciplina> temp = disciplinasPorSemana.get(d.getDiaSemana());

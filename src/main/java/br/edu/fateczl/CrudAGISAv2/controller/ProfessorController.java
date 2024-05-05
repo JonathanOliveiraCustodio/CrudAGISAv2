@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,12 @@ import br.edu.fateczl.CrudAGISAv2.persistence.ProfessorDao;
 
 @Controller
 public class ProfessorController {
+	
+	@Autowired
+	GenericDao gDao;
+	
+	@Autowired
+	ProfessorDao pDao;
 
 	@RequestMapping(name = "professor", value = "/professor", method = RequestMethod.GET)
 	public ModelAndView professorGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
@@ -120,41 +128,30 @@ public class ProfessorController {
 	}
 
 	private String cadastrarProfessor(Professor p) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ProfessorDao pDao = new ProfessorDao(gDao);
 		String saida = pDao.iudProfessor("I", p);
 		return saida;
 
 	}
 
 	private String alterarProfessor(Professor p) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ProfessorDao pDao = new ProfessorDao(gDao);
 		String saida = pDao.iudProfessor("U", p);
 		return saida;
 
 	}
 
 	private String excluirProfessor(Professor p) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ProfessorDao pDao = new ProfessorDao(gDao);
 		String saida = pDao.iudProfessor("D", p);
 		return saida;
 
 	}
 
 	private Professor buscarProfessor(Professor p) throws SQLException, ClassNotFoundException {
-		GenericDao gDao = new GenericDao();
-		ProfessorDao pDao = new ProfessorDao(gDao);
 		p = pDao.consultar(p);
 		return p;
 
 	}
 
 	private List<Professor> listarProfessores() throws SQLException, ClassNotFoundException {
-
-		GenericDao gDao = new GenericDao();
-		ProfessorDao pDao = new ProfessorDao(gDao);
 		List<Professor> professores = pDao.listar();
 
 		return professores;
