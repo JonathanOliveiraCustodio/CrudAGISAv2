@@ -1331,7 +1331,7 @@ RETURN
     AND lc.dataChamada = @dataChamada
 );
 GO
---SELECT * FROM listaChamada
+SELECT * FROM eliminacoes
 
 --SELECT * FROM fn_Lista_Chamada_Disciplina(1001,'2024-04-02');
 CREATE PROCEDURE sp_iud_listaChamada
@@ -1369,6 +1369,51 @@ BEGIN
 END
 GO
 
+CREATE FUNCTION fn_lista_eliminacoes()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT e.codigo,
+           e.codigoMatricula,
+           e.codigoDisciplina,
+           e.dataEliminacao,
+           e.status,
+           e.nomeInstituicao,
+           a.nome AS nomeAluno,
+           d.nome AS nomeDisciplina,
+           c.nome AS nomeCurso
+    FROM eliminacoes e
+    JOIN matricula M ON e.codigoMatricula = M.codigo
+    JOIN aluno a ON M.codigoAluno = a.CPF
+    JOIN disciplina d ON e.codigoDisciplina = d.codigo
+    JOIN curso c ON a.curso = c.codigo
+);
 
+SELECT * FROM fn_lista_eliminacoes();
 
+CREATE FUNCTION fn_buscar_eliminacao (@codigo INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT e.codigo,
+           e.codigoMatricula,
+           e.codigoDisciplina,
+           e.dataEliminacao,
+           e.status,
+           e.nomeInstituicao,
+           a.nome AS nomeAluno,
+		   a.CPF AS cpfAluno,
+           d.nome AS nomeDisciplina,
+           c.nome AS nomeCurso,
+		   c.codigo AS codigoCurso
+    FROM eliminacoes e
+    JOIN matricula M ON e.codigoMatricula = M.codigo
+    JOIN aluno a ON M.codigoAluno = a.CPF
+    JOIN disciplina d ON e.codigoDisciplina = d.codigo
+    JOIN curso c ON a.curso = c.codigo
+    WHERE e.codigo = @codigo
+);
 
+SELECT * FROM fn_buscar_eliminacao(1);

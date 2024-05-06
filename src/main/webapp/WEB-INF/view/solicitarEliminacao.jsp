@@ -29,7 +29,7 @@
 	}
 	function excluirDisciplina(codigo, codigoProfessor, codigoCurso) {
 		if (confirm("Tem certeza que deseja excluir essa Disciplina?")) {
-	
+			// Construindo a URL com todos os parâmetros
 			var url = 'disciplina?cmd=excluir&codigo=' + codigo
 					+ '&codigoProfessor=' + codigoProfessor + '&codigoCurso='
 					+ codigoCurso;
@@ -49,7 +49,7 @@
 			<div class="container-fluid py-5">
 				<h1 class="display-5 fw-bold">Manutenção de Disciplina</h1>
 				<div class="d-flex gap-2 justify-content-center py-2">
-					<form action="disciplina" method="post" class="row g-3 mt-3">
+					<form action="solicitarEliminacao" method="post" class="row g-3 mt-3">
 						<label for="data" class="form-label col-md-1">Código
 							Disciplina:</label>
 						<div class="col-md-2">
