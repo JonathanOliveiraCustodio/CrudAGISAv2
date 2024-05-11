@@ -107,6 +107,15 @@
 						</div>
 
 						<div class="col-md-11"></div>
+
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" value="Nova Chamada"
+								class="btn btn-primary">
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" value="Consultar"
+								class="btn btn-primary">
+						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao"
 								class="btn btn-success" value="Cadastrar">
@@ -115,13 +124,6 @@
 							<input type="submit" id="botao" name="botao"
 								class="btn btn-success" value="Alterar">
 						</div>
-
-						<div class="col-md-2 d-grid text-center"></div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Consultar"
-								class="btn btn-primary">
-						</div>
-
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Limpar"

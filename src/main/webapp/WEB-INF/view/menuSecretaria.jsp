@@ -24,6 +24,7 @@ pageEncoding="ISO-8859-1"%>
 	  					<li class="list-group-item">Manter Professor</li>
 	  					<li class="list-group-item">Solicitações de Dispensas</li>
 	  					<li class="list-group-item">Alterar Periodo de Matricula</li>
+	  					<li class="list-group-item">Visualizar Histórico do Aluno</li>
 	  				</ul>
 				</div>
 		    </div>

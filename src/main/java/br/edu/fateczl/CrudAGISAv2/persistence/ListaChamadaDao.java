@@ -15,6 +15,8 @@ import br.edu.fateczl.CrudAGISAv2.model.Aluno;
 import br.edu.fateczl.CrudAGISAv2.model.Curso;
 import br.edu.fateczl.CrudAGISAv2.model.Disciplina;
 import br.edu.fateczl.CrudAGISAv2.model.ListaChamada;
+import br.edu.fateczl.CrudAGISAv2.model.Matricula;
+import br.edu.fateczl.CrudAGISAv2.model.MatriculaDisciplina;
 import br.edu.fateczl.CrudAGISAv2.model.Professor;
 
 @Repository
@@ -194,6 +196,40 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 		con.close();
 
 		return disciplinas;
+	}
+	
+	public List<ListaChamada> construirCorpoHistorico(String cpf) throws ClassNotFoundException, SQLException {
+		List<ListaChamada> listaChamadas = new ArrayList<>();
+		
+		Connection c = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM fn_corpo_historico(?)");
+		PreparedStatement ps = c.prepareStatement(sql.toString());
+		ps.setString(1, cpf);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			ListaChamada lc = new ListaChamada();
+			
+			Disciplina d = new Disciplina();
+			d.setCodigo(rs.getInt("codigo"));
+			d.setNome(rs.getString("nome"));
+			lc.setDisciplina(d);
+			
+			Professor p = new Professor();
+			p.setNome(rs.getString("professor"));
+			lc.setProfessor(p);
+			
+			MatriculaDisciplina md = new MatriculaDisciplina();
+			md.setNotaFinal(rs.getDouble("notaFinal"));
+			md.setTotalFaltas(rs.getInt("faltas"));
+			lc.setMatriculaDisciplina(md);
+			
+			listaChamadas.add(lc);
+		} 
+		rs.close();
+		ps.close();
+		c.close();
+		return listaChamadas;
 	}
 
 

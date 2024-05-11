@@ -1525,7 +1525,6 @@ RETURN
     WHERE p.codigo = @codigo_professor
 );
 GO
---SELECT * FROM fn_listar_lista_chamada_datas(1001);
 CREATE FUNCTION fn_listar_lista_chamada_datas (@codigoDisciplina INT)
 RETURNS TABLE
 AS
@@ -1567,5 +1566,65 @@ BEGIN
     END
 END;
 GO
-
-
+CREATE FUNCTION fn_cabecalho_historico(@cpf CHAR(11))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT a.RA, a.nome, c.nome AS curso, m.dataMatricula, a.pontuacaoVestibular, a.posicaoVestibular  
+	FROM aluno a, curso c, matricula m
+	WHERE a.CPF = @cpf AND
+	a.CPF = m.codigoAluno AND
+	a.curso = c.codigo
+);
+GO
+CREATE FUNCTION fn_corpo_historico(@cpf CHAR(11))
+RETURNS TABLE
+AS
+RETURN
+(
+	SELECT d.codigo, d.nome, p.nome AS professor, md.notaFinal, 
+		SUM(
+			CASE WHEN lc.presenca1 = 0 THEN 1 ELSE 0 END +
+			CASE WHEN lc.presenca2 = 0 THEN 1 ELSE 0 END +
+			CASE WHEN lc.presenca3 = 0 THEN 1 ELSE 0 END +
+			CASE WHEN lc.presenca4 = 0 THEN 1 ELSE 0 END
+		) AS faltas
+	FROM aluno a
+	JOIN matricula m ON a.CPF = m.codigoAluno
+	JOIN matriculaDisciplina md ON md.CodigoMatricula = m.codigo
+	JOIN disciplina d ON d.codigo = md.codigoDisciplina
+	JOIN professor p ON p.codigo = d.codigoProfessor
+	LEFT JOIN listaChamada lc ON
+	(lc.codigoMatricula = m.codigo AND lc.codigoDisciplina = d.codigo)
+	WHERE a.CPF = @cpf
+	GROUP BY d.codigo, d.nome, p.nome, md.notaFinal
+);
+GO
+CREATE PROCEDURE sp_nova_chamada
+    @codigo_disciplina INT
+AS
+BEGIN
+    DECLARE @matricula INT,
+			@codigo INT,
+			@numero_aulas INT
+	SELECT @numero_aulas = d.horasSemanais FROM disciplina d WHERE d.codigo = @codigo_disciplina
+    DECLARE c CURSOR FOR
+        SELECT m.codigo
+        FROM matriculaDisciplina md, matricula m
+        WHERE md.codigoDisciplina = 1001 AND m.codigo = md.CodigoMatricula AND md.situacao = 'Cursando'
+    OPEN c
+    FETCH NEXT FROM c INTO @matricula
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+		SELECT @codigo = (MAX(codigo) + 1) FROM listaChamada
+		IF @codigo IS NULL
+		BEGIN
+			SET @codigo = 1
+		END
+        INSERT INTO listaChamada VALUES (@codigo, @matricula, @codigo_disciplina, GETDATE(), 1, 1, (CASE WHEN @numero_aulas > 2 THEN 1 ELSE NULL END), (CASE WHEN @numero_aulas > 3 THEN 1 ELSE NULL END))
+        FETCH NEXT FROM c INTO @matricula
+    END
+    CLOSE c
+    DEALLOCATE c
+END
