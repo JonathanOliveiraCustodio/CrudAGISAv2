@@ -21,6 +21,7 @@
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/matricula">Matricula</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/horarios">Horários</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/historico">Histórico</a></li>
+            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/solicitarEliminacao">Solicitar Dispensa</a></li>
         </ul>
   	</header>
   </div>

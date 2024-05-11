@@ -21,6 +21,7 @@
 	  					<li class="list-group-item">Manter sua Matricula</li>
 	  					<li class="list-group-item">Consultar a Grade</li>
 	  					<li class="list-group-item">Consultar a Histórico</li>
+	  					<li class="list-group-item">Solicitar Dispensa</li>
 	  				</ul>
 				</div>
 		    </div>

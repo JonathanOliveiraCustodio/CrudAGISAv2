@@ -22,6 +22,7 @@ pageEncoding="ISO-8859-1"%>
 	  					<li class="list-group-item">Manter Curso</li>
 	  					<li class="list-group-item">Manter Disciplina</li>
 	  					<li class="list-group-item">Manter Professor</li>
+	  					<li class="list-group-item">Solicitações de Dispensas</li>
 	  					<li class="list-group-item">Alterar Periodo de Matricula</li>
 	  				</ul>
 				</div>

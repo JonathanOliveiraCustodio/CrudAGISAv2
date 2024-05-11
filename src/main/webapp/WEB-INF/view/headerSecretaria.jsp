@@ -22,6 +22,7 @@
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/disciplina">Disciplina</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/curso">Curso</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/professor">Professor</a></li>
+            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/analisarEliminacao">Solicitações de Dispensas</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/periodoMatricula">Periodo de Matrícula</a></li>
         </ul>
   	</header>
