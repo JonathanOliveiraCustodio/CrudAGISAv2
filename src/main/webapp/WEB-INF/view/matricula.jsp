@@ -70,7 +70,7 @@
 									<c:forEach var="disciplina" items="${disciplinas.get('Segunda-feira')}">
 										<tr>
 											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox" id="${disciplina.codigo}"
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox[${disciplina.codigo}]" id="${disciplina.codigo}"
 												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
@@ -94,7 +94,7 @@
 									<c:forEach var="disciplina" items="${disciplinas.get('Terça-feira')}">
 										<tr>
 											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox[${disciplina.codigo}]"
 												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
@@ -118,7 +118,7 @@
 									<c:forEach var="disciplina" items="${disciplinas.get('Quarta-feira')}">
 										<tr>
 											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox[${disciplina.codigo}]"
 												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
@@ -142,7 +142,7 @@
 									<c:forEach var="disciplina" items="${disciplinas.get('Quinta-feira')}">
 										<tr>
 											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox[${disciplina.codigo}]"
 												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
@@ -166,7 +166,7 @@
 									<c:forEach var="disciplina" items="${disciplinas.get('Sexta-feira')}">
 										<tr>
 											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox[${disciplina.codigo}]"
 												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
@@ -190,7 +190,7 @@
 									<c:forEach var="disciplina" items="${disciplinas.get('Sábado')}">
 										<tr>
 											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox[${disciplina.codigo}]"
 												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas

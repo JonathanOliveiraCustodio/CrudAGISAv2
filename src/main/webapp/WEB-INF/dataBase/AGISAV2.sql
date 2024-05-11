@@ -1174,3 +1174,27 @@ BEGIN
         RETURN
     END
 END
+GO
+CREATE TRIGGER t_matricula_primeiro_semestre ON aluno
+FOR INSERT
+AS
+BEGIN
+	DECLARE @codigo_curso INT,
+			@cpf CHAR(11),
+			@codigo_matricula INT,
+			@codigo_disciplina INT
+	SELECT @codigo_curso = curso FROM INSERTED
+	SELECT @cpf = cpf FROM INSERTED
+	SELECT @codigo_matricula = ((SELECT MAX(codigo) FROM matricula) + 1 )
+	INSERT INTO matricula VALUES (@codigo_matricula, @cpf, GETDATE(), 1)
+	DECLARE c CURSOR FOR SELECT codigo FROM disciplina WHERE semestre = 1 AND codigoCurso = @codigo_curso
+	OPEN c
+	FETCH NEXT FROM c INTO @codigo_disciplina
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		INSERT INTO matriculaDisciplina VALUES (@codigo_matricula, @codigo_disciplina, 'Cursando', 0.00)
+		FETCH NEXT FROM c INTO @codigo_disciplina
+	END
+	CLOSE c;
+    DEALLOCATE c;
+END
