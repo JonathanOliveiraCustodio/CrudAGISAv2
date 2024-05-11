@@ -95,11 +95,11 @@ CREATE TABLE conteudo(
 )
 GO
 CREATE TABLE eliminacoes (
-    codigo				INT,
+    codigo INT IDENTITY(1,1),
     codigoMatricula		INT,
     codigoDisciplina    INT,
     dataEliminacao		DATE,
-	status             VARCHAR(30),
+	status VARCHAR(30) DEFAULT 'Em análise',
     nomeInstituicao  	VARCHAR(255),
     PRIMARY KEY (codigo),
     FOREIGN KEY (codigoMatricula, codigoDisciplina) REFERENCES matriculaDisciplina(codigoMatricula, codigoDisciplina)
@@ -123,30 +123,30 @@ GO
 
 INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno, periodo_matricula_inicio, periodo_matricula_fim) 
 VALUES 
-(1, 'Administração de Empresas', 4000, 'ADM', 7.8, 'Matutino', '2024-01-01', '2024-01-01'),
-(2, 'Engenharia Civil', 4500, 'ENG CIV', 8.5, 'Vespertino', '2024-01-01', '2024-01-01'),
-(3, 'Direito', 4000, 'DIR', 8.2, 'Noturno', '2024-01-01', '2024-01-01'),
-(4, 'Medicina', 6000, 'MED', 9.3, 'Integral', '2024-01-01', '2024-01-01'),
-(5, 'Ciência da Computação', 3600, 'CC', 8.9, 'Matutino', '2024-01-01', '2024-01-01'),
-(6, 'Psicologia', 4200, 'PSI', 8.0, 'Vespertino', '2024-01-01', '2024-01-01'),
-(7, 'Administração Pública', 3800, 'ADM PUB', 7.5, 'Noturno', '2024-01-01', '2024-01-01'),
-(8, 'Engenharia Elétrica', 4800, 'ENG ELE', 8.7, 'Integral', '2024-01-01', '2024-01-01'),
-(9, 'Gastronomia', 3200, 'GAS', 7.0, 'Matutino', '2024-01-01', '2024-01-01'),
-(10, 'Arquitetura e Urbanismo', 4200, 'ARQ', 8.4, 'Vespertino', '2024-01-01', '2024-01-01'),
+(1, 'Administração de Empresas', 4000, 'ADM', 7.8, 'Matutino', '2024-01-01', '2025-01-01'),
+(2, 'Engenharia Civil', 4500, 'ENG CIV', 8.5, 'Vespertino', '2024-01-01', '2025-01-01'),
+(3, 'Direito', 4000, 'DIR', 8.2, 'Noturno', '2024-01-01', '2025-01-01'),
+(4, 'Medicina', 6000, 'MED', 9.3, 'Integral', '2024-01-01', '2025-01-01'),
+(5, 'Ciência da Computação', 3600, 'CC', 8.9, 'Matutino', '2024-01-01', '2025-01-01'),
+(6, 'Psicologia', 4200, 'PSI', 8.0, 'Vespertino', '2024-01-01', '2025-01-01'),
+(7, 'Administração Pública', 3800, 'ADM PUB', 7.5, 'Noturno', '2024-01-01', '2025-01-01'),
+(8, 'Engenharia Elétrica', 4800, 'ENG ELE', 8.7, 'Integral', '2024-01-01', '2025-01-01'),
+(9, 'Gastronomia', 3200, 'GAS', 7.0, 'Matutino', '2024-01-01', '2025-01-01'),
+(10, 'Arquitetura e Urbanismo', 4200, 'ARQ', 8.4, 'Vespertino', '2024-01-01', '2025-01-01'),
 (11, 'Analise e Desenvolvimento de Sistemas', 4200, 'ADS', 8.4, 'Vespertino', '2024-01-01', '2024-01-01');
 GO
 INSERT INTO aluno (CPF, nome, nomeSocial, dataNascimento, telefoneContato, emailPessoal, emailCorporativo, dataConclusao2Grau, instituicaoConclusao2Grau, pontuacaoVestibular, posicaoVestibular, anoIngresso, semestreIngresso, semestreAnoLimiteGraduacao, RA, curso)
 VALUES
-    ('55312103020', 'João Silva', NULL, '1998-05-15', '123456789', 'joao@email.com', 'joao@empresa.com', '2016-12-20', 'Escola Estadual ABC', 8.75, 25, 2016, 1, '2020-12-31', 2016456, 1),
-    ('86462326034', 'Maria Santos', NULL, '1999-09-22', '987654321', 'maria@email.com', 'maria@empresa.com', '2017-05-10', 'Escola Municipal XYZ', 8.50, 30, 2017, 1, '2021-12-31', 20174567, 2),
-    ('39112829072', 'José Oliveira', NULL, '1997-02-10', '987123456', 'jose@email.com', 'jose@empresa.com', '2016-08-30', 'Colégio Particular QRS', 9.00, 15, 2016, 2, '2020-12-31', 2016378, 1),
-    ('39590327060', 'Ana Souza', NULL, '2000-11-05', '654987321', 'ana@email.com', 'ana@empresa.com', '2017-11-28', 'Escola Estadual XYZ', 8.25, 40, 2017, 1, '2021-12-31', 2016789, 2),
-    ('09129892031', 'Pedro Lima', NULL, '1996-07-30', '987123654', 'pedro@email.com', 'pedro@empresa.com', '2016-04-12', 'Colégio Municipal DEF', 8.90, 20, 2016, 2, '2020-12-31', 20167890, 1),
-    ('89125916068', 'Juliana Castro', NULL, '1999-03-18', '654321987', 'juliana@email.com', 'juliana@empresa.com', '2017-09-03', 'Colégio Estadual LMN', 8.80, 10, 2017, 1, '2021-12-31', 2016901, 2),
-    ('97006247063', 'Lucas Almeida', NULL, '1998-12-25', '321987654', 'lucas@email.com', 'lucas@empresa.com', '2016-10-05', 'Escola Particular GHI', 8.70, 35, 2016, 2, '2020-12-31', 20169012, 1),
-    ('12697967044', 'Carla Pereira', NULL, '2001-04-08', '987321654', 'carla@email.com', 'carla@empresa.com', '2017-12-15', 'Colégio Municipal OPQ', 8.45, 50, 2017, 1, '2021-12-31', 201690123, 2),
-    ('29180596096', 'Marcos Fernandes', NULL, '1997-10-20', '654321789', 'marcos@email.com', 'marcos@empresa.com', '2016-06-18', 'Escola Estadual RST', 8.95, 5, 2016, 1, '2020-12-31', 201634, 1),
-    ('30260403040', 'Aline Rocha', NULL, '2000-01-12', '321654987', 'aline@email.com', 'aline@empresa.com', '2017-08-20', 'Colégio Particular UVW', 8.60, 45, 2017, 2, '2021-12-31', 2017450, 2);
+('55312103020', 'João Silva', NULL, '1998-05-15', '123456789', 'joao@email.com', 'joao@empresa.com', '2016-12-20', 'Escola Estadual ABC', 8.75, 25, 2016, 1, '2020-12-31', 2016456, 1),
+('86462326034', 'Maria Santos', NULL, '1999-09-22', '987654321', 'maria@email.com', 'maria@empresa.com', '2017-05-10', 'Escola Municipal XYZ', 8.50, 30, 2017, 1, '2021-12-31', 20174567, 2),
+('39112829072', 'José Oliveira', NULL, '1997-02-10', '987123456', 'jose@email.com', 'jose@empresa.com', '2016-08-30', 'Colégio Particular QRS', 9.00, 15, 2016, 2, '2020-12-31', 2016378, 1),
+('39590327060', 'Ana Souza', NULL, '2000-11-05', '654987321', 'ana@email.com', 'ana@empresa.com', '2017-11-28', 'Escola Estadual XYZ', 8.25, 40, 2017, 1, '2021-12-31', 2016789, 2),
+('09129892031', 'Pedro Lima', NULL, '1996-07-30', '987123654', 'pedro@email.com', 'pedro@empresa.com', '2016-04-12', 'Colégio Municipal DEF', 8.90, 20, 2016, 2, '2020-12-31', 20167890, 1),
+('89125916068', 'Juliana Castro', NULL, '1999-03-18', '654321987', 'juliana@email.com', 'juliana@empresa.com', '2017-09-03', 'Colégio Estadual LMN', 8.80, 10, 2017, 1, '2021-12-31', 2016901, 2),
+('97006247063', 'Lucas Almeida', NULL, '1998-12-25', '321987654', 'lucas@email.com', 'lucas@empresa.com', '2016-10-05', 'Escola Particular GHI', 8.70, 35, 2016, 2, '2020-12-31', 20169012, 1),
+('12697967044', 'Carla Pereira', NULL, '2001-04-08', '987321654', 'carla@email.com', 'carla@empresa.com', '2017-12-15', 'Colégio Municipal OPQ', 8.45, 50, 2017, 1, '2021-12-31', 201690123, 2),
+('29180596096', 'Marcos Fernandes', NULL, '1997-10-20', '654321789', 'marcos@email.com', 'marcos@empresa.com', '2016-06-18', 'Escola Estadual RST', 8.95, 5, 2016, 1, '2020-12-31', 201634, 1),
+('30260403040', 'Aline Rocha', NULL, '2000-01-12', '321654987', 'aline@email.com', 'aline@empresa.com', '2017-08-20', 'Colégio Particular UVW', 8.60, 45, 2017, 2, '2021-12-31', 2017450, 2);
 GO
 -- Semestre 1
 INSERT INTO professor (codigo, nome, titulacao) VALUES
@@ -718,6 +718,79 @@ INSERT INTO conteudo VALUES
     (19, 'Genética', 'Estudo dos genes e hereditariedade', 1003),
     (20, 'Renascimento', 'Movimento cultural e artístico do século XVI', 1004);
 GO
+INSERT INTO eliminacoes (codigoMatricula, codigoDisciplina, dataEliminacao, status, nomeInstituicao)
+VALUES 
+(1, 1001, '2024-04-01', 'D', 'UNICSUL'),
+(2, 1002, '2024-04-02', 'D', 'FATEC Zona Sul'),
+(3, 1003, '2024-04-03', 'Em análise', 'UNINOVE'),
+(4, 1001, '2024-04-04', 'D', 'UNICID'),
+(4, 1003, '2024-04-04', 'D', 'ETEC'),
+(5, 1002, '2024-04-05', 'Recusado', 'FATEC Zona Sul');
+GO
+SELECT * FROM matricula 
+INSERT INTO listaChamada (codigo, codigoMatricula, codigoDisciplina, dataChamada, presenca1, presenca2, presenca3, presenca4)
+VALUES
+(1, 1, 1001, '2024-04-01', 0, 1, 1, 1),
+(2, 2, 1002, '2024-04-02', 1, 1, 1, 1),
+(3, 3, 1003, '2024-04-03', 0, 1, 1, 1),
+(4, 4, 1001, '2024-04-04', 1, 1, 1, 1),
+(5, 5, 1002, '2024-04-05', 0, 0, 0, 0),
+(6, 6, 1003, '2024-04-03', 0, 1, 1, 1),
+(7, 7, 1001, '2024-04-04', 1, 1, 1, 1),
+(8, 8, 1002, '2024-04-05', 0, 0, 0, 0),
+(9, 9, 1003, '2024-04-03', 0, 1, 1, 1),
+(10, 10, 1001, '2024-04-04', 1, 1, 1, 1),
+(11, 11, 1002, '2024-04-05', 0, 0, 0, 0),
+(12, 1, 1001, '2024-04-04', 1, 0, 1, 0),
+(13, 2, 1002, '2024-04-04', 0, 1, 0, 1),
+(14, 3, 1003, '2024-04-03', 1, 1, 1, 1),
+(15, 4, 1001, '2024-04-02', 0, 0, 0, 0),
+(16, 5, 1002, '2024-04-01', 1, 0, 1, 0),
+(17, 6, 1003, '2024-04-01', 0, 1, 0, 1),
+(18, 7, 1001, '2024-04-02', 1, 1, 1, 1),
+(19, 8, 1002, '2024-04-03', 0, 0, 0, 0),
+(20, 9, 1003, '2024-04-04', 1, 0, 1, 0),
+(21, 10, 1001, '2024-04-05', 0, 1, 0, 1),
+(22, 11, 1002, '2024-04-01', 1, 1, 1, 1),
+(23, 2, 1003, '2024-04-02', 0, 0, 0, 0),
+(24, 3, 1001, '2024-04-03', 1, 0, 1, 0),
+(25, 4, 1002, '2024-04-04', 0, 1, 0, 1),
+(26, 5, 1003, '2024-04-02', 1, 1, 1, 1),
+(27, 6, 1001, '2024-04-01', 0, 0, 0, 0),
+(28, 7, 1002, '2024-04-02', 1, 0, 1, 0),
+(29, 8, 1003, '2024-04-03', 0, 1, 0, 1),
+(30, 9, 1001, '2024-04-04', 1, 1, 1, 1),
+(31, 1, 1002, '2024-04-05', 0, 0, 0, 0),
+(32, 2, 1001, '2024-04-01', 0, 1, 0, 1),
+(33, 3, 1002, '2024-04-02', 1, 0, 1, 0),
+(34, 4, 1003, '2024-04-03', 0, 1, 0, 1),
+(35, 5, 1001, '2024-04-04', 1, 0, 1, 0),
+(36, 6, 1002, '2024-04-05', 0, 1, 0, 1),
+(37, 7, 1003, '2024-04-01', 1, 0, 1, 0),
+(38, 8, 1001, '2024-04-02', 0, 1, 0, 1),
+(39, 9, 1002, '2024-04-03', 1, 0, 1, 0),
+(40, 10, 1003, '2024-04-04', 0, 1, 0, 1),
+(41, 1, 1001, '2024-04-05', 1, 0, 1, 0),
+(42, 2, 1002, '2024-04-01', 0, 1, 0, 1),
+(43, 3, 1003, '2024-04-02', 1, 0, 1, 0),
+(44, 4, 1001, '2024-04-03', 0, 1, 0, 1),
+(45, 5, 1002, '2024-04-04', 1, 0, 1, 0),
+(46, 6, 1003, '2024-04-05', 0, 1, 0, 1),
+(47, 7, 1001, '2024-04-01', 1, 0, 1, 0),
+(48, 8, 1002, '2024-04-02', 0, 1, 0, 1),
+(49, 9, 1003, '2024-04-03', 1, 0, 1, 0),
+(50, 10, 1001, '2024-04-04', 0, 1, 0, 1),
+(51, 1, 1002, '2024-04-05', 1, 0, 1, 0),
+(52, 2, 1003, '2024-04-01', 0, 1, 0, 1),
+(53, 3, 1001, '2024-04-02', 1, 0, 1, 0),
+(54, 4, 1002, '2024-04-03', 0, 1, 0, 1),
+(55, 5, 1003, '2024-04-04', 1, 0, 1, 0),
+(56, 6, 1001, '2024-04-05', 0, 1, 0, 1),
+(57, 7, 1002, '2024-04-01', 1, 0, 1, 0),
+(58, 8, 1003, '2024-04-02', 0, 1, 0, 1),
+(59, 9, 1001, '2024-04-03', 1, 0, 1, 0),
+(60, 10, 1002, '2024-04-04', 0, 1, 0, 1);
+GO
 CREATE VIEW v_listarCurso AS
 SELECT codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno FROM curso
 GO
@@ -1227,83 +1300,7 @@ BEGIN
         RETURN
     END
 END
-
-
-
 GO
-INSERT INTO eliminacoes (codigo, codigoMatricula, codigoDisciplina, dataEliminacao, status, nomeInstituicao)
-VALUES 
-(1, 1, 1001, '2024-04-01', 'D', 'FATEC Zona Leste'),
-(2, 1, 1002, '2024-04-02', 'D', 'FATEC Zona Sul'),
-(3, 1, 1003, '2024-04-03', 'Em análise', 'FATEC Itaqua'),
-(4, 2, 1001, '2024-04-04', 'D', 'FATEC Zona Sul'),
-(5, 2, 1002, '2024-04-05', 'Recusado', 'FATEC Zona Sul');
-GO
-
-INSERT INTO listaChamada (codigo, codigoMatricula, codigoDisciplina, dataChamada, presenca1, presenca2, presenca3, presenca4)
-VALUES
-(1, 1, 1001, '2024-04-01', 0, 1, 1, 1),
-(2, 2, 1002, '2024-04-02', 1, 1, 1, 1),
-(3, 3, 1003, '2024-04-03', 0, 1, 1, 1),
-(4, 4, 1001, '2024-04-04', 1, 1, 1, 1),
-(5, 5, 1002, '2024-04-05', 0, 0, 0, 0),
-(6, 6, 1003, '2024-04-03', 0, 1, 1, 1),
-(7, 7, 1001, '2024-04-04', 1, 1, 1, 1),
-(8, 8, 1002, '2024-04-05', 0, 0, 0, 0),
-(9, 9, 1003, '2024-04-03', 0, 1, 1, 1),
-(10, 10, 1001, '2024-04-04', 1, 1, 1, 1),
-(11, 11, 1002, '2024-04-05', 0, 0, 0, 0),
-(12, 1, 1001, '2024-04-04', 1, 0, 1, 0),
-(13, 2, 1002, '2024-04-04', 0, 1, 0, 1),
-(14, 3, 1003, '2024-04-03', 1, 1, 1, 1),
-(15, 4, 1001, '2024-04-02', 0, 0, 0, 0),
-(16, 5, 1002, '2024-04-01', 1, 0, 1, 0),
-(17, 6, 1003, '2024-04-01', 0, 1, 0, 1),
-(18, 7, 1001, '2024-04-02', 1, 1, 1, 1),
-(19, 8, 1002, '2024-04-03', 0, 0, 0, 0),
-(20, 9, 1003, '2024-04-04', 1, 0, 1, 0),
-(21, 10, 1001, '2024-04-05', 0, 1, 0, 1),
-(22, 11, 1002, '2024-04-01', 1, 1, 1, 1),
-(23, 2, 1003, '2024-04-02', 0, 0, 0, 0),
-(24, 3, 1001, '2024-04-03', 1, 0, 1, 0),
-(25, 4, 1002, '2024-04-04', 0, 1, 0, 1),
-(26, 5, 1003, '2024-04-02', 1, 1, 1, 1),
-(27, 6, 1001, '2024-04-01', 0, 0, 0, 0),
-(28, 7, 1002, '2024-04-02', 1, 0, 1, 0),
-(29, 8, 1003, '2024-04-03', 0, 1, 0, 1),
-(30, 9, 1001, '2024-04-04', 1, 1, 1, 1),
-(31, 1, 1002, '2024-04-05', 0, 0, 0, 0),
-(32, 2, 1001, '2024-04-01', 0, 1, 0, 1),
-(33, 3, 1002, '2024-04-02', 1, 0, 1, 0),
-(34, 4, 1003, '2024-04-03', 0, 1, 0, 1),
-(35, 5, 1001, '2024-04-04', 1, 0, 1, 0),
-(36, 6, 1002, '2024-04-05', 0, 1, 0, 1),
-(37, 7, 1003, '2024-04-01', 1, 0, 1, 0),
-(38, 8, 1001, '2024-04-02', 0, 1, 0, 1),
-(39, 9, 1002, '2024-04-03', 1, 0, 1, 0),
-(40, 10, 1003, '2024-04-04', 0, 1, 0, 1),
-(41, 1, 1001, '2024-04-05', 1, 0, 1, 0),
-(42, 2, 1002, '2024-04-01', 0, 1, 0, 1),
-(43, 3, 1003, '2024-04-02', 1, 0, 1, 0),
-(44, 4, 1001, '2024-04-03', 0, 1, 0, 1),
-(45, 5, 1002, '2024-04-04', 1, 0, 1, 0),
-(46, 6, 1003, '2024-04-05', 0, 1, 0, 1),
-(47, 7, 1001, '2024-04-01', 1, 0, 1, 0),
-(48, 8, 1002, '2024-04-02', 0, 1, 0, 1),
-(49, 9, 1003, '2024-04-03', 1, 0, 1, 0),
-(50, 10, 1001, '2024-04-04', 0, 1, 0, 1),
-(51, 1, 1002, '2024-04-05', 1, 0, 1, 0),
-(52, 2, 1003, '2024-04-01', 0, 1, 0, 1),
-(53, 3, 1001, '2024-04-02', 1, 0, 1, 0),
-(54, 4, 1002, '2024-04-03', 0, 1, 0, 1),
-(55, 5, 1003, '2024-04-04', 1, 0, 1, 0),
-(56, 6, 1001, '2024-04-05', 0, 1, 0, 1),
-(57, 7, 1002, '2024-04-01', 1, 0, 1, 0),
-(58, 8, 1003, '2024-04-02', 0, 1, 0, 1),
-(59, 9, 1001, '2024-04-03', 1, 0, 1, 0),
-(60, 10, 1002, '2024-04-04', 0, 1, 0, 1);
-GO
-
 CREATE FUNCTION fn_Lista_Chamada_Disciplina
 (
     @codigoDisciplina INT,
@@ -1331,7 +1328,7 @@ RETURN
     AND lc.dataChamada = @dataChamada
 );
 GO
-SELECT * FROM eliminacoes
+--SELECT * FROM eliminacoes
 
 --SELECT * FROM fn_Lista_Chamada_Disciplina(1001,'2024-04-02');
 CREATE PROCEDURE sp_iud_listaChamada
@@ -1388,9 +1385,35 @@ RETURN
     JOIN aluno a ON M.codigoAluno = a.CPF
     JOIN disciplina d ON e.codigoDisciplina = d.codigo
     JOIN curso c ON a.curso = c.codigo
+    WHERE e.status = 'Em análise'
 );
-
-SELECT * FROM fn_lista_eliminacoes();
+GO
+--SELECT * FROM fn_lista_eliminacoes();
+--SELECT * FROM eliminacoes();
+CREATE FUNCTION fn_lista_eliminacoes_por_RA (@RA INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT e.codigo,
+           e.codigoMatricula,
+           e.codigoDisciplina,
+           e.dataEliminacao,
+           e.status,
+           e.nomeInstituicao,
+           a.nome AS nomeAluno,
+		   a.RA,
+           d.nome AS nomeDisciplina,
+           c.nome AS nomeCurso
+    FROM eliminacoes e
+    JOIN matricula M ON e.codigoMatricula = M.codigo
+    JOIN aluno a ON M.codigoAluno = a.CPF
+    JOIN disciplina d ON e.codigoDisciplina = d.codigo
+    JOIN curso c ON a.curso = c.codigo
+    WHERE a.RA = @RA
+);
+GO
+--SELECT * FROM fn_lista_eliminacoes_por_RA(20167890);
 
 CREATE FUNCTION fn_buscar_eliminacao (@codigo INT)
 RETURNS TABLE
@@ -1415,5 +1438,134 @@ RETURN
     JOIN curso c ON a.curso = c.codigo
     WHERE e.codigo = @codigo
 );
+GO
+CREATE FUNCTION fn_listar_disciplinas_RA (@RA INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT nomeDisciplina, codigoDisciplina, codigoMatricula
+    FROM (
+        SELECT d.nome AS nomeDisciplina,
+               d.codigo AS codigoDisciplina,
+               m.codigo AS codigoMatricula,
+               ROW_NUMBER() OVER (PARTITION BY d.codigo ORDER BY m.codigo) AS row_num
+        FROM aluno a
+        INNER JOIN matricula m ON a.CPF = m.codigoAluno
+        INNER JOIN curso c ON a.curso = c.codigo
+        INNER JOIN disciplina d ON c.codigo = d.codigoCurso
+        WHERE a.RA = @RA
+    ) AS disciplinas_numero_linha
+    WHERE row_num = 1
+);
 
-SELECT * FROM fn_buscar_eliminacao(1);
+
+--SELECT * FROM fn_listar_disciplinas_RA(20169012);
+
+--SELECT * FROM matricula
+
+GO
+CREATE FUNCTION fn_consultar_aluno_RA (@RA INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT a.CPF, 
+           a.nome, 
+           a.nomeSocial, 
+           a.dataNascimento, 
+           a.telefoneContato, 
+           a.emailPessoal, 
+           a.emailCorporativo, 
+           a.dataConclusao2Grau, 
+           a.instituicaoConclusao2Grau, 
+           a.pontuacaoVestibular, 
+           a.posicaoVestibular, 
+           a.anoIngresso, 
+           a.semestreIngresso, 
+           a.semestreAnoLimiteGraduacao, 
+           a.RA, 
+           c.codigo AS codigoCurso, 
+           c.nome AS nomeCurso 
+    FROM aluno a 
+    JOIN curso c ON a.curso = c.codigo 
+    WHERE a.RA = @RA
+);
+GO
+CREATE PROCEDURE sp_inserir_eliminacao
+    @codigoMatricula INT,
+    @codigoDisciplina INT,
+    @nomeInstituicao VARCHAR(255),
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Inserir a nova eliminação na tabela
+    INSERT INTO eliminacoes (codigoMatricula, codigoDisciplina, dataEliminacao, status, nomeInstituicao)
+    VALUES (@codigoMatricula, @codigoDisciplina, GETDATE(), 'Em análise', @nomeInstituicao);
+
+    -- Definir a mensagem de saída
+    SET @saida = 'Eliminação inserida com sucesso.';
+END;
+GO
+
+CREATE FUNCTION fn_listar_disciplinas_professor
+(
+    @codigo_professor INT
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT d.codigo AS codigoDisciplina, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso 
+    FROM disciplina d 
+    JOIN professor p ON d.codigoProfessor = p.codigo 
+    JOIN curso c ON d.codigoCurso = c.codigo 
+    WHERE p.codigo = @codigo_professor
+);
+GO
+--SELECT * FROM fn_listar_lista_chamada_datas(1001);
+CREATE FUNCTION fn_listar_lista_chamada_datas (@codigoDisciplina INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT dataChamada
+    FROM listaChamada
+    WHERE codigoDisciplina = @codigoDisciplina
+    GROUP BY dataChamada
+);
+GO
+CREATE PROCEDURE sp_update_eliminacao
+    @acao CHAR(1),
+    @codigo INT,
+    @codigoMatricula INT,
+    @codigoDisciplina INT,
+    @dataEliminacao DATE,
+    @status VARCHAR(30),
+    @nomeInstituicao VARCHAR(255),
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF (@acao = 'U')
+    BEGIN
+        UPDATE eliminacoes
+        SET codigoMatricula = @codigoMatricula,
+            codigoDisciplina = @codigoDisciplina,
+            dataEliminacao = @dataEliminacao,
+            status = @status,
+            nomeInstituicao = @nomeInstituicao
+        WHERE codigo = @codigo;
+
+        SET @saida = 'Registro de eliminação atualizado com sucesso';
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1);
+        RETURN;
+    END
+END;
+GO
+
+

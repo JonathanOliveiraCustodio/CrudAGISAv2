@@ -22,18 +22,10 @@
 		return true;
 	}
 
-	function editarEliminacao((codigo) {
-		window.location.href = 'eliminacao?cmd=alterar&codigo=' + codigo;
+	function editarEliminacao(codigo) {
+		window.location.href = 'analisarEliminacao?cmd=alterar&codigo='
+				+ codigo;
 	}
-	
-	<script>
-    function alterarStatus(novoStatus, codigo) {
-        // Aqui você pode realizar ações com base no novo status e no código
-        console.log("Novo status:", novoStatus);
-        console.log("Código:", codigo);
-
-        // Ou atualizar algum elemento na página com base no novo status
-    }
 </script>
 	
 </head>
@@ -69,7 +61,7 @@
 
 						<label for="status" class="form-label col-md-1">Status:</label>
 						<div class="col-md-3">
-							<select class="form-select" id="status" name="staus">
+							<select class="form-select" id="status" name="status">
 								<option value="">Escolha um Status</option>
 								<option value="D"
 									<c:if test="${analisarEliminacao.status eq 'D'}">selected</c:if>>D</option>
@@ -93,6 +85,13 @@
 							<input class="form-control" type="text" id="nomeCurso"
 								name="nomeCurso" placeholder="Nome Curso"
 								value='<c:out value="${analisarEliminacao.curso.nome }"></c:out>'>
+						</div>
+						
+						<label for="dataEliminacao" class="form-label col-md-1">Data Solicitação:</label>
+						<div class="col-md-3">
+							<input class="form-control" type="date" id="dataEliminacao"
+								name="dataEliminacao" placeholder="Data Solicitação"
+								value='<c:out value="${analisarEliminacao.dataEliminacao }"></c:out>'>
 						</div>
 
 						<div class="col-md-3"></div>
@@ -141,7 +140,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="9"
+						<th class="titulo-tabela" colspan="10"
 							style="text-align: center; font-size: 23px;">Lista de
 							Eliminações</th>
 					</tr>
@@ -154,7 +153,7 @@
 						<th>Data</th>
 						<th>Status</th>
 						<th>Nome Instituição</th>
-						<th>Alterar</th>
+
 					</tr>
 				</thead>
 				<tbody class="table-group-divider">
@@ -168,28 +167,11 @@
 							<td><c:out value="${e.curso.nome}" /></td>
 							<td><c:out value="${e.disciplina.nome}" /></td>
 							<td><fmt:formatDate value="${e.dataEliminacao}"
-									pattern="dd/MM/yyyy" /></td>
-							<td><select name="status"
-								onchange="alterarStatus(this.value, '${e.codigo}')">
-									<c:if test="${e.status eq 'Recusado'}">
-										<option value="Recusado" selected>Recusado</option>
-										<option value="D">D</option>
-										<option value="Em análise">Em análise</option>
-									</c:if>
-									<c:if test="${e.status eq 'D'}">
-										<option value="Recusado">Recusado</option>
-										<option value="D" selected>D</option>
-										<option value="Em análise">Em análise</option>
-									</c:if>
-									<c:if test="${e.status eq 'Em análise'}">
-										<option value="Recusado">Recusado</option>
-										<option value="D">D</option>
-										<option value="Em análise" selected>Em análise</option>
-									</c:if>
-							</select></td>
+									pattern="dd/MM/yyyy" /></td>									
+							<td><c:out value="${e.status}" /></td>								
 							<td><c:out value="${e.nomeInstituicao}" /></td>
-							<td><button class="btn btn-primary"
-									onclick="editarEliminacao('${e.codigo}')">ALTERAR</button></td>
+							
+							
 						</tr>
 					</c:forEach>
 				</tbody>

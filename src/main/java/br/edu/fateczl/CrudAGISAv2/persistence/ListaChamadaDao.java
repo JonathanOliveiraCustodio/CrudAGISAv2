@@ -12,8 +12,10 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import br.edu.fateczl.CrudAGISAv2.model.Aluno;
+import br.edu.fateczl.CrudAGISAv2.model.Curso;
 import br.edu.fateczl.CrudAGISAv2.model.Disciplina;
 import br.edu.fateczl.CrudAGISAv2.model.ListaChamada;
+import br.edu.fateczl.CrudAGISAv2.model.Professor;
 
 @Repository
 public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
@@ -85,8 +87,39 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 
 	@Override
 	public List<ListaChamada> listar() throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<ListaChamada> listasChamada = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM listaChamada ");
+		PreparedStatement ps = con.prepareStatement(sql.toString());		
+		//ps.setInt(1, codigoDisciplina);
+
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {		
+			ListaChamada lc = new ListaChamada();
+			lc.setCodigo(rs.getInt("codigo"));
+			lc.setCodigoMatricula(rs.getInt("codigoMatricula"));
+			lc.setCodigoMatricula(rs.getInt("codigoDisciplina"));
+			lc.setDataChamada(rs.getDate("dataChamada"));
+			lc.setPresenca1(rs.getInt("presenca1"));
+			lc.setPresenca2(rs.getInt("presenca2"));
+			lc.setPresenca3(rs.getInt("presenca3"));
+			lc.setPresenca4(rs.getInt("presenca4"));		
+		//	Aluno a = new Aluno();
+		//	a.setNome(rs.getString("nomeAluno"));
+		//	a.setRA(rs.getString("RA"));
+		//	lc.setAluno(a);
+		//	Disciplina d = new Disciplina();
+		//	d.setCodigo(rs.getInt("codigoDisciplina"));
+		//	d.setNome(rs.getString("nomeDisciplina"));
+		//	lc.setDisciplina(d);
+			listasChamada.add(lc);
+		}
+		rs.close();
+		ps.close();
+		con.close();
+
+		return listasChamada;
 	}
 
 
@@ -96,11 +129,8 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 		Connection c = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();		
 		sql.append("SELECT * FROM fn_Lista_Chamada_Disciplina(?) ");
-		
 		PreparedStatement ps = c.prepareStatement(sql.toString());
 		ps.setInt(1, lc.getCodigo());
-	
-
 		ResultSet rs = ps.executeQuery();
 		if (rs.next()) {
 			lc.setCodigo(rs.getInt("codigo"));
@@ -128,6 +158,42 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 		c.close();
 
 		return lc;
+	}
+	
+	public List<Disciplina> listarDisciplinaProfessor(int codigoProfessor) throws SQLException, ClassNotFoundException {
+
+		List<Disciplina> disciplinas = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM fn_listar_disciplinas_professor(?); ");
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setInt(1, codigoProfessor);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+
+			Professor p = new Professor();
+			p.setNome(rs.getString("nomeProfessor"));
+
+			Curso c = new Curso();
+			c.setNome(rs.getString("nomeCurso"));
+
+			Disciplina d = new Disciplina();
+			d.setCodigo(rs.getInt("codigoDisciplina"));
+			d.setNome(rs.getString("nomeDisciplina"));
+			d.setHorasSemanais(rs.getInt("horasSemanais"));
+			d.setHoraInicio(rs.getString("horarioInicio"));
+			d.setSemestre(rs.getInt("semestre"));
+			d.setDiaSemana(rs.getString("diaSemana"));
+			d.setProfessor(p);
+			d.setCurso(c);
+			disciplinas.add(d);
+		}
+		rs.close();
+		ps.close();
+		con.close();
+
+		return disciplinas;
 	}
 
 

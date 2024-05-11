@@ -12,6 +12,16 @@
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
 <title>Lista de Chamada</title>
+<script>
+	function validarBusca() {
+		var codigo = document.getElementById("codigo").value;
+		if (codigo.trim() === "") {
+			alert("Por favor, insira um codigo.");
+			return false;
+		}
+		return true;
+	}
+</script>
 
 
 </head>
@@ -25,8 +35,28 @@
 				<h1 class="display-5 fw-bold">Lista de Chamada</h1>
 				<div class="d-flex gap-2 justify-content-center py-2">
 					<form action="listaChamada" method="post" class="row g-3 mt-3">
+						<label for="data" class="form-label col-md-1">Professor:</label>
+						<div class="col-md-2">
+							<select class="form-select" id="professor" name="professor">
+								<option value="0">Escolha um Professor</option>
+								<c:forEach var="p" items="${professores}">
+									<c:if
+										test="${(empty listaChamada) || (p.codigo ne listaChamada.professor.codigo)}">
+										<option value="${p.codigo}"><c:out value="${p}" /></option>
+									</c:if>
+									<c:if test="${p.codigo eq listaChamada.professor.codigo}">
+										<option value="${p.codigo}" selected="selected"><c:out
+												value="${p}" /></option>
+									</c:if>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-md-1">
+							<input type="submit" id="botao" name="botao"
+								class="btn btn-primary" value="Buscar">
+						</div>
 
-						<div class="col-md-4"></div>
+
 						<label for="data" class="form-label col-md-1">Disciplina:</label>
 						<div class="col-md-3">
 							<select class="form-select" id="disciplina" name="disciplina">
@@ -44,12 +74,36 @@
 							</select>
 						</div>
 
-						<label for="dataConclusao2Grau" class="form-label col-md-1">Data
-							Chamada:</label>
+
+
+
+						<label for="data" class="form-label col-md-1">Data das
+							Chamadas:</label>
 						<div class="col-md-3">
-							<input class="form-control" type="date" id="dataChamada"
-								name="dataChamada" placeholder="Data Chamada"
-								value='<c:out value="${lc.dataChamada }"></c:out>'>
+							<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+							<select class="form-select" id="dataChamada" name="dataChamada">
+								<option value="0">Escolha uma Data</option>
+								<c:forEach var="d" items="${datasChamadas}">
+									<c:choose>
+										<c:when
+											test="${empty listaChamada || d ne listaChamada.dataChamada}">
+											<option value="${d.dataChamada}">
+												<fmt:formatDate value="${d.dataChamada}"
+													pattern="dd/MM/yyyy" />
+											</option>
+										</c:when>
+										<c:otherwise>
+											<option value="${d.dataChamada}" selected="selected">
+												<fmt:formatDate value="${d.dataChamada}"
+													pattern="dd/MM/yyyy" />
+											</option>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+							</select>
+
+
 						</div>
 
 						<div class="col-md-11"></div>
@@ -65,6 +119,12 @@
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Consultar"
+								class="btn btn-primary">
+						</div>
+
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-primary">
 						</div>
 
@@ -97,11 +157,13 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
+						
 						<th class="titulo-tabela" colspan="6"
 							style="text-align: center; font-size: 23px;">Lista de
-							Chamada, Disciplina: <span id="nomeDisciplina"></span>, Data: <span
-							id="dataChamada"></span>
+							Chamada, Disciplina: <span id="nomeDisciplina">${disciplina.nome}</span>,
+							Data: <span id="dataChamada">${dataChamada}</span>
 						</th>
+
 					</tr>
 					<tr>
 						<th>Nome</th>

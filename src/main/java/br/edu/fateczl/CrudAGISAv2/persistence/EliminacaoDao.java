@@ -109,17 +109,17 @@ public class EliminacaoDao implements ICrud<Eliminacao> {
 	}
 
 
-	public String iudEliminacao(String acao, Eliminacao c) throws SQLException, ClassNotFoundException {
+	public String iudEliminacao(String acao, Eliminacao e) throws SQLException, ClassNotFoundException {
 		Connection con = gDao.getConnection();
-		String sql = "{CALL sp_iud_eliminacao (?,?,?,?,?,?,?,?)}";
+		String sql = "{CALL sp_update_eliminacao (?,?,?,?,?,?,?,?)}";
 		CallableStatement cs = con.prepareCall(sql);
 		cs.setString(1, acao);
-		cs.setInt(2, c.getCodigo());
-		cs.setInt(3, c.getCodigoMatricula());
-		cs.setInt(4, c.getCodigoDisciplina());
-		cs.setDate(5, c.getDataEliminacao());
-		cs.setString(6, c.getStatus());
-		cs.setString(7, c.getNomeInstituicao());
+		cs.setInt(2, e.getCodigo());
+		cs.setInt(3, e.getCodigoMatricula());
+		cs.setInt(4, e.getCodigoDisciplina());
+		cs.setDate(5, e.getDataEliminacao());
+		cs.setString(6, e.getStatus());
+		cs.setString(7, e.getNomeInstituicao());
 		cs.registerOutParameter(8, Types.VARCHAR);
 		cs.execute();
 		String saida = cs.getString(8);

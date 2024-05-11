@@ -80,4 +80,30 @@ public class MatriculaDao {
 		return saida;
 	}
 
+	public Matricula buscarMatricula(int RA) throws NumberFormatException, SQLException, ClassNotFoundException {
+		Connection c = gDao.getConnection();
+		StringBuilder sql = new StringBuilder();
+		sql.append(
+				"SELECT TOP 1  m.codigo AS codigoMatricula, m.dataMatricula, m.semestre, a.RA, a.nome AS nomeAluno ");
+		sql.append("FROM matricula m JOIN aluno a ON m.codigoAluno = a.CPF WHERE a.RA = ? ");
+		sql.append(" ");
+
+		PreparedStatement ps = c.prepareStatement(sql.toString());
+		ps.setInt(1, RA);
+		ResultSet rs = ps.executeQuery();
+
+		Matricula m = new Matricula();
+		if (rs.next()) {
+			m.setCodigo(rs.getInt("codigoMatricula"));
+			m.setCodigoAluno(rs.getString("RA"));
+			m.setDataMatricula(rs.getDate("dataMatricula"));
+			m.setSemestre(rs.getInt("semestre"));
+	
+		}
+		rs.close();
+		c.close();
+
+		return m;
+	}
+
 }

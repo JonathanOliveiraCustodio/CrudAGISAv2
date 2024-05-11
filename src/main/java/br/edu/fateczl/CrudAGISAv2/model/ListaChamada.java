@@ -1,6 +1,7 @@
 package br.edu.fateczl.CrudAGISAv2.model;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,15 +20,16 @@ public class ListaChamada {
 	int codigoDisciplina;
 	Aluno aluno;
 	Disciplina disciplina;
+	Professor professor;
 	
-	@Override
 	public String toString() {
-		return "ListaChamada [codigo=" + codigo + "]";
-	}
-	
-
-
+        if (dataChamada != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            return dateFormat.format(dataChamada);
+        } else {
+            return "null";
+        }
+    }
 }
-
 
 

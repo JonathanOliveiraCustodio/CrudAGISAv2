@@ -28,6 +28,7 @@ public class TelefoneController {
 		String aluno = allRequestParam.get("aluno");
 		
 		List<Telefone> telefones = new ArrayList<>();
+		
 		Aluno a = new Aluno();
 		a.setCPF(aluno);
 

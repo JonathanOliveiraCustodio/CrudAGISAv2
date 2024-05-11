@@ -16,7 +16,7 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-5">
-				<h1 class="display-5 fw-bold">Telefones</h1>
+				<h1 class="display-5 fw-bold">Telefones Tes</h1>
 		        <div class="d-flex gap-2 justify-content-center py-2">
 					<form action="telefone" method="post" class="row g-3 mt-3">
 						<input type="hidden" id="aluno" name="aluno" value='<c:out value="${aluno.CPF }"></c:out>'>
