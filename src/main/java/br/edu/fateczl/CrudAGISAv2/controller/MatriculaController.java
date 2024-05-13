@@ -107,15 +107,20 @@ public class MatriculaController {
 			} else {
 				a = buscarAluno(a);
 				m = buscarMatriculaAtual(a);
-				String[] checkboxes = allRequestParam.containsKey("disciplinaCheckbox") ? allRequestParam.get("disciplinaCheckbox").split(",") : new String[0];
-
-				for (String c : checkboxes) {
-					Disciplina d = new Disciplina();
-					d.setCodigo(Integer.parseInt(c));
-					d = buscarDisciplina(d);
-
-					saida = realizarMatriculaDisciplina(d, m);
+				for (String key : allRequestParam.keySet()) {
+					if (key.contains("disciplinaCheckbox")) {
+		                String c = allRequestParam.get(key);
+						Disciplina d = new Disciplina();
+						d.setCodigo(Integer.parseInt(c));
+						d = buscarDisciplina(d);
+						saida = realizarMatriculaDisciplina(d, m);
+		            }
+		        }
+				if (erro != "") {
+					saida = "";
 				}
+				a = null;
+				m = null;
 			}
 
 		} catch (Exception e) {
@@ -129,7 +134,6 @@ public class MatriculaController {
 		model.addAttribute("periodoValido", periodoValido);
 		model.addAttribute("disciplinas", disciplinasPorSemana);
 		model.addAttribute("disciplinasMatriculadas", codigosDisciplinasMatriculadas);
-		
 		return new ModelAndView("matricula");
 	}
 	
