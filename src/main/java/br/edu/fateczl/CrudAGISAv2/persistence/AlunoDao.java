@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import br.edu.fateczl.CrudAGISAv2.model.Aluno;
 import br.edu.fateczl.CrudAGISAv2.model.Curso;
+import br.edu.fateczl.CrudAGISAv2.model.Matricula;
 
 
 @Repository
@@ -195,6 +196,38 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 		c.close();
 
 		return saida;
+	}
+
+	public Aluno construirCabecalhoHistorico(String cpf) throws ClassNotFoundException, SQLException {
+		Aluno a = new Aluno();
+		
+		Connection c = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM fn_cabecalho_historico(?)");
+		PreparedStatement ps = c.prepareStatement(sql.toString());
+		ps.setString(1, cpf);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			a.setCPF(cpf);
+			a.setRA(rs.getInt("RA"));
+			a.setNome(rs.getString("nome"));
+			a.setPontuacaoVestibular(rs.getFloat("pontuacaoVestibular"));
+			a.setPosicaoVestibular(rs.getInt("posicaoVestibular"));
+			
+			Curso curso = new Curso();
+			curso.setNome(rs.getString("curso"));
+			a.setCurso(curso);
+			
+			Matricula m = new Matricula();
+			m.setDataMatricula(rs.getDate("dataMatricula"));
+			a.setMatricula(m);
+		} else {
+			a = null;
+		}
+		rs.close();
+		ps.close();
+		c.close();
+		return a;
 	}
 
 }

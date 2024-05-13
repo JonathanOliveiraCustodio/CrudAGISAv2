@@ -11,5 +11,6 @@ public class MatriculaDisciplina {
 	int codigoDisciplina;
 	String situacao;
 	double notaFinal;
+	int totalFaltas;
 
 }

@@ -18,12 +18,13 @@
   			AGIS</h3>
   		</a>
         <ul class="nav nav-pills">
-            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/aluno">Manter Aluno</a></li>
+            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/aluno">Aluno</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/disciplina">Disciplina</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/curso">Curso</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/professor">Professor</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/analisarEliminacao">Solicitações de Dispensas</a></li>
             <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/periodoMatricula">Periodo de Matrícula</a></li>
+            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/historico">Histórico</a></li>
         </ul>
   	</header>
   </div>

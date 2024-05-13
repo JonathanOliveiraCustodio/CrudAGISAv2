@@ -21,6 +21,7 @@ public class ListaChamada {
 	Aluno aluno;
 	Disciplina disciplina;
 	Professor professor;
+	MatriculaDisciplina matriculaDisciplina;
 	
 	public String toString() {
         if (dataChamada != null) {

@@ -27,6 +27,7 @@ public class Aluno {
 	Date semestreAnoLimiteGraduacao;
 	int RA;
 	Curso curso;
+	Matricula matricula;
 	
 
 	@Override
