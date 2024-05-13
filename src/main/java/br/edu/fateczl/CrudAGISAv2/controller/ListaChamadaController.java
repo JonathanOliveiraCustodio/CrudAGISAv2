@@ -33,11 +33,11 @@ public class ListaChamadaController {
 
 	@Autowired
 	ListaChamadaDao lcDao;
-	
+
 	@Autowired
 	ProfessorDao pDao;
+	String dataDaLista;
 
-	 
 	@RequestMapping(name = "listaChamada", value = "/listaChamada", method = RequestMethod.GET)
 	public ModelAndView chamadaGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 
@@ -47,32 +47,14 @@ public class ListaChamadaController {
 		List<Disciplina> disciplinas = new ArrayList<>();
 		List<Professor> professores = new ArrayList<>();
 		List<ListaChamada> datasChamadas = new ArrayList<>();
-		
+
 		ListaChamada lc = new ListaChamada();
 
 		try {
 			String cmd = allRequestParam.get("cmd");
 			String codigo = allRequestParam.get("codigo");
-
-			if (cmd != null) {
-				if (cmd.contains("Realizar Chamada")) {
-
-					 lc.setCodigo(Integer.parseInt(codigo));
-					// c = buscarConteudo(c);
-
-				} else if (cmd.contains("Alterar Chamada")) {
-
-					lc.setCodigo(Integer.parseInt(codigo));
-					// c = buscarConteudo(c);
-					/// saida = excluirConteudo(c);
-				//	lc = null;
-
-				}
-
-			}
 			professores = listaProfessores();
 			datasChamadas = listaChamadas();
-		
 
 		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
@@ -91,23 +73,16 @@ public class ListaChamadaController {
 
 	@RequestMapping(name = "listaChamada", value = "/listaChamada", method = RequestMethod.POST)
 	public ModelAndView listaChamdaPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
-
 		String cmd = allRequestParam.get("botao");
 		String professor = allRequestParam.get("professor");
 		String dataChamada = allRequestParam.get("dataChamada");
-		String presenca1 = allRequestParam.get("presenca1");
-		String presenca2 = allRequestParam.get("presenca2");
-		String presenca3 = allRequestParam.get("presenca3");
-		String presenca4 = allRequestParam.get("presenca4");		
-		String codigoMatricula = allRequestParam.get("codigoMatricula");
-		String codigoDisciplina = allRequestParam.get("codigoDisciplina");
 		String disciplina = allRequestParam.get("disciplina");
-	
+
 		String saida = "";
 		String erro = "";
 
 		ListaChamada lc = new ListaChamada();
-		
+
 		Professor p = new Professor();
 		Disciplina d = new Disciplina();
 
@@ -115,73 +90,79 @@ public class ListaChamadaController {
 		List<ListaChamada> listasChamadas = new ArrayList<>();
 		List<Professor> professores = new ArrayList<>();
 		List<ListaChamada> datasChamadas = new ArrayList<>();
-		
-		try {        
-			
-			p.setCodigo(Integer.parseInt(professor));			
+
+		try {
+			p.setCodigo(Integer.parseInt(professor));
 			p = buscarProfessor(p);
 			lc.setProfessor(p);
-			
-
-		
 			professores = listaProfessores();
-		        if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-		        	
-		            lc.setPresenca1(Integer.parseInt(presenca1));
-		            lc.setPresenca2(Integer.parseInt(presenca2));
-		            lc.setPresenca3(Integer.parseInt(presenca3));
-		            lc.setPresenca4(Integer.parseInt(presenca4));
-		        }
-		        if (cmd.contains("Cadastrar")) {
-		            saida = cadastrarListaChamada(lc);
-		            lc = null;
-		        }
-		        if (cmd.contains("Alterar")) {	
-		            saida = alterarListaChamada(lc);
-		            lc = null;
-		        }
-		        if (cmd.contains("Buscar")) {
-		
-		        	 disciplinas = listarDisciplinas(Integer.parseInt(professor));
-		        	 datasChamadas = listaChamadas();
-		        	System.out.println("Valor selecionado do código do professor: " + professor);	
-		        		
-		        }
+			disciplinas = listarDisciplinas(Integer.parseInt(professor));
+			if (!disciplina.equals("0")) {
+				datasChamadas = listaDatas(disciplina);
+				d.setCodigo(Integer.parseInt(disciplina));
+				d = buscarDisciplina(d);
+				lc.setDisciplina(d);
+			}
+			if (cmd != null) {
+				if (cmd.contains("Nova Chamada")) {
+					gerarNovaChamada(Integer.parseInt(disciplina));
+					datasChamadas = listaDatas(disciplina);
+				}
+				
+				if (cmd.contains("Alterar")) {
+					listasChamadas = consultarListaChamada(Integer.parseInt(disciplina), Date.valueOf(dataDaLista));
+					lc.setCodigoDisciplina(d.getCodigo());
+					lc.setDataChamada(Date.valueOf(dataDaLista));
+					for (ListaChamada chamada : listasChamadas) {
+						String codigoLc = String.valueOf(chamada.getCodigo());
+						lc.setCodigo(Integer.parseInt(codigoLc));
+						lc.setCodigoMatricula(chamada.getCodigoMatricula());
+						lc.setPresenca1(allRequestParam.containsKey("presenca1[" + codigoLc + "]") ? 1 : 0);
+						lc.setPresenca2(allRequestParam.containsKey("presenca2[" + codigoLc + "]") ? 1 : 0);
+						if (d.getHorasSemanais() > 2) {
+							lc.setPresenca3(allRequestParam.containsKey("presenca3[" + codigoLc + "]") ? 1 : 0);
+							if (d.getHorasSemanais() > 3) {
+								lc.setPresenca4(allRequestParam.containsKey("presenca4[" + codigoLc + "]") ? 1 : 0);
+							}
+						}
+						saida = alterarListaChamada(lc);
+					}
+					lc = null;
+					disciplina = null;
+					professor = null;
+					listasChamadas = null;
+				}
 
-		       		        
-		        if (cmd.contains("Consultar")) {
-		        	d.setCodigo(Integer.parseInt(disciplina));			
+				if (cmd.contains("Consultar")) {
+					d.setCodigo(Integer.parseInt(disciplina));
 					d = buscarDisciplina(d);
 					lc.setDisciplina(d);
-		        	
-		        	System.out.println("Valor selecionado do código da Disciplina: " + disciplina);
-		        	System.out.println("Data: " + dataChamada);	
-		            listasChamadas = consultarListaChamada(Integer.parseInt(disciplina), Date.valueOf(dataChamada));
-		            
-		        }
-		       
+					lc.setDataChamada(Date.valueOf(dataChamada));
+					dataDaLista = dataChamada;
+
+					listasChamadas = consultarListaChamada(Integer.parseInt(disciplina), Date.valueOf(dataChamada));
+				}
+			}
+
 		} catch (SQLException | ClassNotFoundException e) {
-		    erro = e.getMessage();
+			erro = e.getMessage();
 		} finally {
 
-		model.addAttribute("saida", saida);
-		model.addAttribute("erro", erro);
-		model.addAttribute("listaChamada", lc);
-		model.addAttribute("listasChamadas", listasChamadas);
-		model.addAttribute("disciplinas", disciplinas);
-		model.addAttribute("professores", professores);
-		model.addAttribute("datasChamadas", datasChamadas);
+			model.addAttribute("saida", saida);
+			model.addAttribute("erro", erro);
+			model.addAttribute("listaChamada", lc);
+			model.addAttribute("listasChamadas", listasChamadas);
+			model.addAttribute("disciplinas", disciplinas);
+			model.addAttribute("disciplina", d);
+			model.addAttribute("professores", professores);
+			model.addAttribute("datasChamadas", datasChamadas);
+			model.addAttribute("dataChamada", dataChamada);
 		}
 		return new ModelAndView("listaChamada");
 	}
-	
-	
 
-	
-	private String cadastrarListaChamada(ListaChamada lc) throws SQLException, ClassNotFoundException {
-		String saida = lcDao.iudListaChamada("I", lc);
-		return saida;
-
+	private void gerarNovaChamada(int disciplina) throws ClassNotFoundException, SQLException {
+		lcDao.novaChamada(disciplina);
 	}
 
 	private String alterarListaChamada(ListaChamada lc) throws SQLException, ClassNotFoundException {
@@ -189,13 +170,12 @@ public class ListaChamadaController {
 		return saida;
 
 	}
-	
-	
+
 	private Professor buscarProfessor(Professor p) throws SQLException, ClassNotFoundException {
 		p = pDao.consultar(p);
 		return p;
 	}
-	
+
 	private Disciplina buscarDisciplina(Disciplina d) throws SQLException, ClassNotFoundException {
 		d = dDao.consultar(d);
 		return d;
@@ -211,14 +191,19 @@ public class ListaChamadaController {
 		List<Disciplina> disciplinas = lcDao.listarDisciplinaProfessor(codigoProfessor);
 		return disciplinas;
 	}
-	
+
 	private List<Professor> listaProfessores() throws ClassNotFoundException, SQLException {
 		List<Professor> professores = pDao.listar();
 		return professores;
 	}
-	
+
 	private List<ListaChamada> listaChamadas() throws ClassNotFoundException, SQLException {
-		List<ListaChamada> datasChamadas = lcDao.listar();
+		List<ListaChamada> listaChamadas = lcDao.listar();
+		return listaChamadas;
+	}
+
+	private List<ListaChamada> listaDatas(String disciplina) throws ClassNotFoundException, SQLException {
+		List<ListaChamada> datasChamadas = lcDao.listarDatas(Integer.parseInt(disciplina));
 		return datasChamadas;
 	}
 

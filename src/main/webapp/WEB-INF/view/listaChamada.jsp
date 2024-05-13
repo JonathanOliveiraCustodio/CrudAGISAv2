@@ -13,14 +13,9 @@
 	crossorigin="anonymous">
 <title>Lista de Chamada</title>
 <script>
-	function validarBusca() {
-		var codigo = document.getElementById("codigo").value;
-		if (codigo.trim() === "") {
-			alert("Por favor, insira um codigo.");
-			return false;
-		}
-		return true;
-	}
+	function buscarProfessor() {
+		document.getElementById("listaChamada").submit();
+	};
 </script>
 
 
@@ -34,10 +29,12 @@
 			<div class="container-fluid py-5">
 				<h1 class="display-5 fw-bold">Lista de Chamada</h1>
 				<div class="d-flex gap-2 justify-content-center py-2">
-					<form action="listaChamada" method="post" class="row g-3 mt-3">
+					<form action="listaChamada" method="post" class="row g-3 mt-3"
+						id="listaChamada">
 						<label for="data" class="form-label col-md-1">Professor:</label>
 						<div class="col-md-2">
-							<select class="form-select" id="professor" name="professor">
+							<select class="form-select" id="professor" name="professor"
+								onChange="buscarProfessor()">
 								<option value="0">Escolha um Professor</option>
 								<c:forEach var="p" items="${professores}">
 									<c:if
@@ -51,15 +48,10 @@
 								</c:forEach>
 							</select>
 						</div>
-						<div class="col-md-1">
-							<input type="submit" id="botao" name="botao"
-								class="btn btn-primary" value="Buscar">
-						</div>
-
-
 						<label for="data" class="form-label col-md-1">Disciplina:</label>
 						<div class="col-md-3">
-							<select class="form-select" id="disciplina" name="disciplina">
+							<select class="form-select" id="disciplina" name="disciplina"
+								onChange="buscarProfessor()">
 								<option value="0">Escolha uma Disciplina</option>
 								<c:forEach var="d" items="${disciplinas }">
 									<c:if
@@ -87,7 +79,7 @@
 								<c:forEach var="d" items="${datasChamadas}">
 									<c:choose>
 										<c:when
-											test="${empty listaChamada || d ne listaChamada.dataChamada}">
+											test="${(empty listaChamada) || (d ne listaChamada.dataChamada)}">
 											<option value="${d.dataChamada}">
 												<fmt:formatDate value="${d.dataChamada}"
 													pattern="dd/MM/yyyy" />
@@ -118,85 +110,109 @@
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao"
-								class="btn btn-success" value="Cadastrar">
-						</div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao"
 								class="btn btn-success" value="Alterar">
 						</div>
+						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-primary">
 						</div>
+						<div align="center" class="container"></div>
+						<br />
+						<div align="center">
+							<c:if test="${not empty erro }">
+								<h2>
+									<b><c:out value="${erro }" /></b>
+								</h2>
+							</c:if>
+						</div>
+						<br />
+						<div align="center">
+							<c:if test="${not empty saida }">
+								<h3>
+									<b><c:out value="${saida }" /></b>
+								</h3>
+							</c:if>
+						</div>
+						<br />
+						<div
+							class="container py-4 text-center d-flex justify-content-center"
+							align="center">
+							<c:if test="${not empty listasChamadas }">
+								<table class="table table-striped">
+									<thead>
+										<tr>
 
+											<th class="titulo-tabela" colspan="6"
+												style="text-align: center; font-size: 20px;">
+												<div class="d-flex gap-2 justify-content-center">
+													<div class="row">
+														<label for="nomeDisciplina" class="form-label col-md-2">Disciplina:
+														</label>
+														<div class="col-md-5">
+															<input class="form-control" id="nomeDisciplina"
+																value="${disciplina.nome}" disabled></input>
+														</div>
+														<label for="dataChamada" class="form-label col-md-2">Data:
+														</label>
+														<div class="col-md-3">
+															<input class="form-control" name="dataChamada"
+																id="dataChamada" type="text"
+																value="${dataChamada}" disabled></input>
+														</div>
+													</div>
+												</div>
+											</th>
+
+										</tr>
+										<tr>
+											<th>Nome</th>
+											<th>Data Chamada</th>
+											<th>Presença 1</th>
+											<th>Presença 2</th>
+											<c:if test="${ disciplina.horasSemanais > 2}">
+											<th>Presença 3</th>
+											</c:if>
+											<c:if test="${ disciplina.horasSemanais > 3}">
+											<th>Presença 4</th>
+											</c:if>
+										</tr>
+									</thead>
+									<tbody class="table-group-divider">
+										<c:forEach var="lc" items="${listasChamadas }">
+											<tr id="${lc.codigo }">
+												<td><c:out value="${lc.aluno.nome }" /></td>
+												<td><fmt:formatDate value="${lc.dataChamada}"
+														pattern="dd/MM/yyyy" /></td>
+
+												<td><input type="checkbox"
+													name="presenca1[${lc.codigo}]" value="${lc.codigo}"
+													<c:if test="${lc.presenca1 == 1}">checked</c:if>></td>
+												<td><input type="checkbox"
+													name="presenca2[${lc.codigo}]" value="${lc.codigo}"
+													<c:if test="${lc.presenca2 == 1}">checked</c:if>></td>
+													<c:if test="${ disciplina.horasSemanais > 2}">
+												<td><input type="checkbox"
+													name="presenca3[${lc.codigo}]" value="${lc.codigo}"
+													<c:if test="${lc.presenca3 == 1}">checked</c:if>></td>
+													</c:if>
+													<c:if test="${ disciplina.horasSemanais > 3}">
+												<td><input type="checkbox"
+													name="presenca4[${lc.codigo}]" value="${lc.codigo}"
+													<c:if test="${lc.presenca4 == 1}">checked</c:if>></td>
+													</c:if>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</c:if>
+						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div align="center" class="container"></div>
-	<br />
-	<div align="center">
-		<c:if test="${not empty erro }">
-			<h2>
-				<b><c:out value="${erro }" /></b>
-			</h2>
-		</c:if>
-	</div>
-	<br />
-	<div align="center">
-		<c:if test="${not empty saida }">
-			<h3>
-				<b><c:out value="${saida }" /></b>
-			</h3>
-		</c:if>
-	</div>
-	<br />
-	<div class="container py-4 text-center d-flex justify-content-center"
-		align="center">
-		<c:if test="${not empty listasChamadas }">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						
-						<th class="titulo-tabela" colspan="6"
-							style="text-align: center; font-size: 23px;">Lista de
-							Chamada, Disciplina: <span id="nomeDisciplina">${disciplina.nome}</span>,
-							Data: <span id="dataChamada">${dataChamada}</span>
-						</th>
 
-					</tr>
-					<tr>
-						<th>Nome</th>
-						<th>Data Chamada</th>
-						<th>Presença 1</th>
-						<th>Presença 2</th>
-						<th>Presença 3</th>
-						<th>Presença 4</th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<c:forEach var="lc" items="${listasChamadas }">
-						<tr>
-							<td><c:out value="${lc.aluno.nome }" /></td>
-
-							<td><fmt:formatDate value="${lc.dataChamada}"
-									pattern="dd/MM/yyyy" /></td>
-
-							<td><input type="checkbox" name="presenca1" value="1"
-								<c:if test="${lc.presenca1 == 1}">checked</c:if>></td>
-							<td><input type="checkbox" name="presenca2" value="1"
-								<c:if test="${lc.presenca2 == 1}">checked</c:if>></td>
-							<td><input type="checkbox" name="presenca3" value="1"
-								<c:if test="${lc.presenca3 == 1}">checked</c:if>></td>
-							<td><input type="checkbox" name="presenca4" value="1"
-								<c:if test="${lc.presenca4 == 1}">checked</c:if>></td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</c:if>
-	</div>
 </body>
 </html>

@@ -1597,7 +1597,7 @@ RETURN
 	JOIN professor p ON p.codigo = d.codigoProfessor
 	LEFT JOIN listaChamada lc ON
 	(lc.codigoMatricula = m.codigo AND lc.codigoDisciplina = d.codigo)
-	WHERE a.CPF = @cpf
+	WHERE a.CPF = @cpf AND md.situacao = 'Aprovado'
 	GROUP BY d.codigo, d.nome, p.nome, md.notaFinal
 );
 GO
@@ -1612,7 +1612,7 @@ BEGIN
     DECLARE c CURSOR FOR
         SELECT m.codigo
         FROM matriculaDisciplina md, matricula m
-        WHERE md.codigoDisciplina = 1001 AND m.codigo = md.CodigoMatricula AND md.situacao = 'Cursando'
+        WHERE md.codigoDisciplina = @codigo_disciplina AND m.codigo = md.CodigoMatricula AND md.situacao = 'Cursando'
     OPEN c
     FETCH NEXT FROM c INTO @matricula
     WHILE @@FETCH_STATUS = 0
@@ -1628,3 +1628,4 @@ BEGIN
     CLOSE c
     DEALLOCATE c
 END
+SELECT * FROM listaChamada

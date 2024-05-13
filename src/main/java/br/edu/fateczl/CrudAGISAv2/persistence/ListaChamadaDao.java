@@ -42,7 +42,6 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 			ListaChamada lc = new ListaChamada();
 			lc.setCodigo(rs.getInt("codigo"));
 			lc.setCodigoMatricula(rs.getInt("codigoMatricula"));
-			lc.setCodigoMatricula(rs.getInt("codigoDisciplina"));
 			lc.setDataChamada(rs.getDate("dataChamada"));
 			lc.setPresenca1(rs.getInt("presenca1"));
 			lc.setPresenca2(rs.getInt("presenca2"));
@@ -67,7 +66,7 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 	@Override
 	public String iudListaChamada(String acao, ListaChamada lc) throws SQLException, ClassNotFoundException {
 		Connection con = gDao.getConnection();
-		String sql = "{CALL sp_iud_lista_chamada (?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{CALL sp_iud_listaChamada (?,?,?,?,?,?,?,?,?,?)}";
 		CallableStatement cs = con.prepareCall(sql);
 		cs.setString(1, acao);
 		cs.setInt(2, lc.getCodigo());
@@ -123,6 +122,29 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 
 		return listasChamada;
 	}
+	
+	@Override
+	public List<ListaChamada> listarDatas(int disciplina) throws SQLException, ClassNotFoundException {
+		List<ListaChamada> listasChamada = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM fn_listar_lista_chamada_datas(?)");
+		PreparedStatement ps = con.prepareStatement(sql.toString());		
+		ps.setInt(1, disciplina);
+
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {		
+			ListaChamada lc = new ListaChamada();
+			lc.setDataChamada(rs.getDate("dataChamada"));
+			listasChamada.add(lc);
+		}
+		rs.close();
+		ps.close();
+		con.close();
+
+		return listasChamada;
+	}
+
 
 
 
@@ -230,6 +252,17 @@ public class ListaChamadaDao implements ICrud<ListaChamada>, IListaChamadaDao {
 		ps.close();
 		c.close();
 		return listaChamadas;
+	}
+
+
+	public void novaChamada(int disciplina) throws ClassNotFoundException, SQLException {
+		Connection con = gDao.getConnection();
+		String sql = "{CALL sp_nova_chamada (?)}";
+		CallableStatement cs = con.prepareCall(sql);
+		cs.setInt(1, disciplina);
+		cs.execute();
+		cs.close();
+		con.close();
 	}
 
 
